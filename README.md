@@ -1,5 +1,5 @@
 ```
 pip install pipenv
 pipenv shell
-pipenv install requirements.txtG
+pipenv install requirements.txt
 ```
