@@ -1,5 +1,4 @@
 ```
 python -m pip install pipenv
-pipenv shell
-pipenv install requirements.txt
+pipenv install --dev
 ```
