@@ -1,4 +1,4 @@
 ```
 python -m pip install pipenv
-pipenv install --dev
+python -m pipenv install --dev
 ```
