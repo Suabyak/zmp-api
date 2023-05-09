@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
+from api.models import Post
 from ast import literal_eval
 
 def dict_from_json_response(response):
@@ -16,24 +17,10 @@ class TestViews(TestCase):
         self.user = User.objects.first()
     
     def test_create_post(self):
-        pass
-        # response = self.client.post("/api/posts/create/", 
-        #                             {"i" : "TestUser", 
-        #                              "email" : "test@email.com",
-        #                              "password" : "test",
-        #                              "password_confirm" : "test"})
-        # response_dict = dict_from_json_response(response)
-        # self.assertEqual(response_dict["success"], True)
+        post = Post(
+            body="Lorem ipsum sit dolor amet...",
+            user=self.user
+        )
+        post.save()
+        self.assertEqual(Post.objects.filter(body="Lorem ipsum sit dolor amet...").first().id, post.id)
         
-        # response = self.client.post("/api/users/sign-up/", 
-        #                             {"username" : "TestUser", 
-        #                              "email" : "test@email.com",
-        #                              "password" : "test",
-        #                              "password_confirm" : "test2"})
-        # response_dict = dict_from_json_response(response)
-        # self.assertEqual(response_dict["success"], False)
-        
-        # response = self.client.get("/api/users/sign-up/")
-        # response_dict = dict_from_json_response(response)
-        # self.assertEqual(response_dict["success"], False)
-   

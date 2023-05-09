@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication
 from django.contrib.auth.models import User
 import jwt, datetime, zmp_api.settings as settings
 
@@ -22,7 +21,6 @@ def get_user_from_token(token):
     return User.objects.filter(id=payload["id"]).first()
 
 class SingUpView(APIView):
-    authentication_classes = [authentication.TokenAuthentication]
     def post(self, request):
         if (request.data["password"] != request.data["password_confirm"]):  
             return Response({
