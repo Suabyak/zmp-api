@@ -47,12 +47,11 @@ class SignInView(APIView):
                 "message":"Invalid username or password"})
         login(request, user)
         token = get_token_for_user(user)
-        response = Response(
+        return Response(
             {"success":True, 
-             "message":"Successfully logged in",},
-            headers={"token":token})
-        
-        return response
+             "message":"Successfully logged in",
+             "user_id":user.id,
+             "token":token})
         
 class GetUserByIdView(APIView):
     def get(self, request):        

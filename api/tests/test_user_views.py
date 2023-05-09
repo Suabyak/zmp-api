@@ -102,7 +102,6 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 405)
     
     def test_logout_user(self):
-        from api.views.users import get_token_for_user
         response = self.client.post("/api/users/sign-in/", 
                                     {"username" : "Suabyak", 
                                      "password" : "suabo"})
