@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 import jwt, datetime, zmp_api.settings as settings
-from django.views.decorators.csrf import csrf_exempt
 
 def get_token_for_user(user):
     payload = {
@@ -21,9 +20,10 @@ def get_user_from_token(token):
     
     return User.objects.filter(id=payload["id"]).first()
 
+
 class SingUpView(APIView):
-    @csrf_exempt
     def post(self, request):
+        # print(request.data)
         if (request.data["password"] != request.data["password_confirm"]):  
             return Response({
                 "success":False, 
@@ -37,19 +37,22 @@ class SingUpView(APIView):
             "success":True, 
             "message":"Successfully signed up"})
 
+
 class SignInView(APIView):   
-    @csrf_exempt     
     def post(self, request):
-        
+        print()
+        print(request.data)
         user = authenticate(username = request.data["username"], 
                             password = request.data["password"])
 
         if user is None:
+            print("user is none")
             return Response({
                 "success":False, 
                 "message":"Invalid username or password"})
         login(request, user)
         token = get_token_for_user(user)
+        print("success")
         return Response(
             {"success":True, 
              "message":"Successfully logged in",

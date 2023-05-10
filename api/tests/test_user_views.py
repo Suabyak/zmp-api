@@ -1,10 +1,12 @@
 from django.test import TestCase, Client
+from django.http.cookie import SimpleCookie
 from api.models import User
-from ast import literal_eval
 
 class TestViews(TestCase):
     def setUp(self):
-        self.client = Client()
+        self.client = Client(enforce_csrf_checks=True)
+        self.token = self.client.get("/api/token/").data["csrf_token"]
+        
         self.client.post("/api/users/sign-up/", 
                          {"username" : "Suabyak", 
                           "email" : "suaby@email.com",
@@ -35,26 +37,33 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 405)
     
     def test_sign_in_user(self):
+        print("sign in start")
         response = self.client.post("/api/users/sign-in/", 
                                     {"username" : "Suabyak", 
                                      "password" : "suabo"})
         self.assertEqual(response.data["success"], True)
         self.assertEqual(response.data["message"], "Successfully logged in")
         
+        print("sign in start1")
         response = self.client.post("/api/users/sign-in/", 
                                     {"username" : "Suaby", 
                                      "password" : "suabo"})
+        print(response.status_code)
+        print(response)
         self.assertEqual(response.data["success"], False)
         self.assertEqual(response.data["message"], "Invalid username or password")
         
+        print("sign in start2")
         response = self.client.post("/api/users/sign-in/", 
                                     {"username" : "Suabyak", 
-                                     "password" : "suaboooo"})
+                                     "password" : "suaboooo"}) 
         self.assertEqual(response.data["success"], False)
         self.assertEqual(response.data["message"], "Invalid username or password")
         
+        print("sign in start3")
         response = self.client.get("/api/users/sign-in/")
         self.assertEqual(response.status_code, 405)
+        print("sign in end")
     
     def test_get_user_data(self):
         response = self.client.get("/api/users/get-user-data/", 

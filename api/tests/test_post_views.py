@@ -1,10 +1,6 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from api.models import Post
-from ast import literal_eval
-
-def dict_from_json_response(response):
-    return literal_eval(response.content.decode(response.charset).replace("true", "True").replace("false", "False"))
 
 class TestViews(TestCase):
     def setUp(self):
