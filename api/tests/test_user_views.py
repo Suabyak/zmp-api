@@ -109,7 +109,7 @@ class TestViews(TestCase):
         
         response = self.client.post("/api/users/logout/", headers=response.headers)
         self.assertEqual(response.data["success"], True)
-        self.assertRaises(KeyError, response.data["token"])
+        self.assertEqual(response.data.get("token"), None)
         
         response = self.client.post("/api/users/logout/", headers=response.headers)
         self.assertEqual(response.data["success"], False)
