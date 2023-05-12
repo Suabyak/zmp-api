@@ -4,7 +4,7 @@ from api.models import Comment
 from api.utils.jwt_token import get_token_for_user
 from api.utils.models import serialize_model_list
 
-class TestViews(TestCase):
+class TestUserViews(TestCase):
     def setUp(self):
         self.client = Client(enforce_csrf_checks=True)
         

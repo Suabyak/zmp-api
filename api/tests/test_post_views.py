@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from api.models import Post, Likes
 from api.views.users import get_token_for_user
 
-class TestViews(TestCase):
+class TestPostViews(TestCase):
     def setUp(self):
         self.client = APIClient()
         response = self.client.post("/api/users/sign-up/", 

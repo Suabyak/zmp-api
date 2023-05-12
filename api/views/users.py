@@ -8,9 +8,7 @@ from api.models import Comment
 from api.utils.models import serialize_model_list
 
 
-class SingUpView(APIView):
-    permission_classes = (AllowAny,)
-    
+class SingUpView(APIView):    
     def post(self, request):
         if (request.data["password"] != request.data["password_confirm"]):  
             return Response({
@@ -26,9 +24,7 @@ class SingUpView(APIView):
             "message":"Successfully signed up"})
 
 
-class SignInView(APIView):   
-    permission_classes = (AllowAny,)
-    
+class SignInView(APIView):       
     def post(self, request):
         user = authenticate(username = request.data["username"], 
                             password = request.data["password"])
