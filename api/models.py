@@ -17,7 +17,8 @@ class Post(models.Model):
             "id": self.id,
             "user": serialize_user(self.user),
             "body": self.body,
-            "likes": likes
+            "likes": likes,
+            "total_likes": self.get_likes_amount()
             }
 
 class Likes(models.Model):

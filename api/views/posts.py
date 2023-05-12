@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.models import Post
+from api.models import Post, Likes
 from api.utils.jwt_token import get_user_from_token, WrongTokenException
 from api.utils.models import serialize_model_list
 
@@ -57,7 +57,7 @@ class GetPostByIdView(APIView):
 
         return Response(post.serialize())
 
-class UpdatePost(APIView):
+class UpdatePostView(APIView):
     def patch(self, request, post_id):
         try:
             user = get_user_from_token(request.META.get("token"))
@@ -86,7 +86,7 @@ class UpdatePost(APIView):
             "success": True
         })
 
-class DeletePost(APIView):
+class DeletePostView(APIView):
     def delete(self, request, post_id):
         try:
             user = get_user_from_token(request.META.get("token"))
@@ -103,10 +103,47 @@ class DeletePost(APIView):
                 "message": f"There is no post with {post_id} id"
             })
         
+            
+        if post.user.id != user["user_id"]:
+            return Response({
+                "success": False,
+            })
+            
         post.delete()
         
         return Response({
             "success": True
         })
         
+class LikePostView(APIView):
+    def post(self, request, post_id):
+        try:
+            user = get_user_from_token(request.META.get("token"))
+        except WrongTokenException:
+            return Response({
+                "success": False
+            })
+            
+        post = Post.objects.filter(id=post_id).first()
         
+        if post is None:
+            return Response({
+                "success": False,
+                "message": f"There is no post with {post_id} id"
+            })
+            
+            
+        if post.user.id != user["user_id"]:
+            return Response({
+                "success": False,
+            })
+        
+        likes = Likes(
+            post = post,
+            user = User.objects.filter(id=user["user_id"]).first()
+        )
+        likes.save()
+        
+        return Response({
+            "success": True
+        })

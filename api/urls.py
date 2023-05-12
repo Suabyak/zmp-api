@@ -11,6 +11,7 @@ urlpatterns = [
     path("posts/create/", posts.CreatePostView.as_view()),
     path("posts/user-get/<int:user_id>/", posts.GetUserPostsView.as_view()),
     path("posts/get/<int:post_id>/", posts.GetPostByIdView.as_view()),
-    path("posts/update/<int:post_id>/", posts.UpdatePost.as_view()),
-    path("post/<int:post_id>/", posts.DeletePost.as_view()),
+    path("posts/update/<int:post_id>/", posts.UpdatePostView.as_view()),
+    path("post/<int:post_id>/", posts.DeletePostView.as_view()),
+    path("post/like/<int:post_id>/", posts.LikePostView.as_view()),
 ]

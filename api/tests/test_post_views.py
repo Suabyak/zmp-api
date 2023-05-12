@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
-from api.models import Post
+from api.models import Post, Likes
 from api.views.users import get_token_for_user
 
 class TestViews(TestCase):
@@ -100,6 +100,22 @@ class TestViews(TestCase):
         self.assertEqual(Post.objects.filter(id=id).first(), None)
         
         response = self.client.delete(f"/api/post/{id_wrong_test}/",
+                                    **{"token" : "Wrong token"})
+        self.assertEqual(response.data["success"], False)
+    
+    def test_like_post(self):
+        
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorem ipsum"}, 
+                                    **{"token" : self.token})
+        id = response.data['id']
+        
+        response = self.client.post(f"/api/post/like/{id}/", 
+                                    **{"token" : self.token})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Post.objects.filter(id=id).first().get_likes_amount(), 1)
+        
+        response = self.client.post(f"/api/post/like/{id}/",
                                     **{"token" : "Wrong token"})
         self.assertEqual(response.data["success"], False)
         
