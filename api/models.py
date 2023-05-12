@@ -24,10 +24,22 @@ class Post(models.Model):
 class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-
     
     def serialize(self):
         return {
             "id": self.id,
             "user": serialize_user(self.user),
             "post_id": self.post.id}
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    body = models.TextField()
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": serialize_user(self.user),
+            "post_id": self.post.id,
+            "body": self.body}
+    

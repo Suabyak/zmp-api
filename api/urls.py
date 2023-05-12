@@ -14,4 +14,5 @@ urlpatterns = [
     path("posts/update/<int:post_id>/", posts.UpdatePostView.as_view()),
     path("post/<int:post_id>/", posts.DeletePostView.as_view()),
     path("post/like/<int:post_id>/", posts.LikePostView.as_view()),
+    path("post/<int:post_id>/comment/", posts.CommentPostView.as_view()),
 ]

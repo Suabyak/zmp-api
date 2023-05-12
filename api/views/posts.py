@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.models import Post, Likes
+from api.models import Post, Likes, Comment
 from api.utils.jwt_token import get_user_from_token, WrongTokenException
 from api.utils.models import serialize_model_list
 
@@ -143,6 +143,34 @@ class LikePostView(APIView):
             user = User.objects.filter(id=user["user_id"]).first()
         )
         likes.save()
+        
+        return Response({
+            "success": True
+        })
+        
+class CommentPostView(APIView):
+    def post(self, request, post_id):
+        try:
+            user = get_user_from_token(request.META.get("token"))
+        except WrongTokenException:
+            return Response({
+                "success": False
+            })
+            
+        post = Post.objects.filter(id=post_id).first()
+        
+        if post is None:
+            return Response({
+                "success": False,
+                "message": f"There is no post with {post_id} id"
+            })
+        
+        comment = Comment(
+            post = post,
+            user = User.objects.filter(id=user["user_id"]).first(),
+            body = request.data["body"]
+        )
+        comment.save()
         
         return Response({
             "success": True

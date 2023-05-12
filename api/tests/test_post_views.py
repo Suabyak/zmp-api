@@ -120,3 +120,24 @@ class TestViews(TestCase):
         self.assertEqual(response.data["success"], False)
         
         
+    def test_comment_post(self):
+        
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorem ipsum"}, 
+                                    **{"token" : self.token})
+        id = response.data['id']
+        
+        response = self.client.post(f"/api/post/{id}/comment/", 
+                                    {"body": "Fajny post :]"},
+                                    **{"token" : self.token})
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client.post(f"/api/post/1236787654334567/comment/", 
+                                    {"body": "Fajny post :]"},
+                                    **{"token" : self.token})
+        self.assertEqual(response.data["success"], False)
+        
+        response = self.client.post(f"/api/post/{id}/comment/", 
+                                    {"body": "Fajny post :]"},
+                                    **{"token" : "Wrong token"})
+        self.assertEqual(response.data["success"], False)
