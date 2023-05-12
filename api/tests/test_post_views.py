@@ -115,6 +115,11 @@ class TestPostViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Post.objects.filter(id=id).first().get_likes_amount(), 1)
         
+        response = self.client.post(f"/api/post/like/{id}/", 
+                                    **{"token" : self.token})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Post.objects.filter(id=id).first().get_likes_amount(), 0)
+        
         response = self.client.post(f"/api/post/like/{id}/",
                                     **{"token" : "Wrong token"})
         self.assertEqual(response.data["success"], False)

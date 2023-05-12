@@ -138,6 +138,14 @@ class LikePostView(APIView):
                 "success": False,
             })
         
+        likes = Likes.objects.filter(user_id=user["user_id"], post_id=post.id).first()
+        if likes is not None:
+            likes.delete()
+        
+            return Response({
+                "success": True
+            })
+            
         likes = Likes(
             post = post,
             user = User.objects.filter(id=user["user_id"]).first()
