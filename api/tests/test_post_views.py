@@ -7,11 +7,11 @@ from api.views.users import get_token_for_user
 class TestViews(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.client.post("/api/users/sign-up/", 
-                         {"username" : "Suabyak", 
-                          "email" : "suaby@email.com",
-                          "password" : "suabo",
-                          "password_confirm" : "suabo"})
+        response = self.client.post("/api/users/sign-up/", 
+                                    {"username" : "Suabyak", 
+                                    "email" : "suaby@email.com",
+                                    "password" : "suabo",
+                                    "password_confirm" : "suabo"})
         self.user = User.objects.first()
         self.token = get_token_for_user(self.user)
     
@@ -35,12 +35,72 @@ class TestViews(TestCase):
                                     {"body": "Lorua Merleu"}, 
                                     **{"token" : self.token})
         
-        response = self.client.get(f"/api/posts/get/{self.user.id}/")
+        response = self.client.get(f"/api/posts/user-get/{self.user.id}/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data["posts"]), 2)
         self.assertEqual(response.data["posts"][1]["body"], "Lorua Merleu")
 
+        response = self.client.get(f"/api/posts/user-get/1827368712638612836812686/")
+        self.assertEqual(response.data["success"], False)
+    
+    def test_get_post_by_id(self):
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorem ipsum"}, 
+                                    **{"token" : self.token})
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorua Merleu"}, 
+                                    **{"token" : self.token})
+        id = response.data['id']
+        
+        response = self.client.get(f"/api/posts/get/{id}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['id'], id)
+        self.assertEqual(response.data['body'], "Lorua Merleu")
+        
         response = self.client.get(f"/api/posts/get/1827368712638612836812686/")
+        self.assertEqual(response.data["success"], False)
+        
+    def test_update_post(self):
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorem ipsum"}, 
+                                    **{"token" : self.token})
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorua Merleu"}, 
+                                    **{"token" : self.token})
+        id = response.data['id']
+        
+        response = self.client.patch(f"/api/posts/update/{id}/", 
+                                     {
+                                         "body": "Merleu Sorleu"
+                                     }, 
+                                    **{"token" : self.token})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Post.objects.filter(id=id).first().body, "Merleu Sorleu")
+        
+        response = self.client.patch(f"/api/posts/update/1827368712638612836812686/", 
+                                     {
+                                         "body": "Merleu Sorleu"
+                                     }, 
+                                    **{"token" : self.token})
+        self.assertEqual(response.data["success"], False)
+    
+    def test_delete_post(self):
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorem ipsum"}, 
+                                    **{"token" : self.token})
+        id_wrong_test = response.data["id"]
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorua Merleu"}, 
+                                    **{"token" : self.token})
+        id = response.data['id']
+        
+        response = self.client.delete(f"/api/post/{id}/",
+                                    **{"token" : self.token})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Post.objects.filter(id=id).first(), None)
+        
+        response = self.client.delete(f"/api/post/{id_wrong_test}/",
+                                    **{"token" : "Wrong token"})
         self.assertEqual(response.data["success"], False)
         
         

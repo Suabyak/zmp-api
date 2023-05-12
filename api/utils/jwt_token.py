@@ -1,6 +1,5 @@
 from rest_framework_jwt.settings import api_settings
 import jwt
-from api.exceptions import WrongTokenException
 
 def get_token_for_user(user):
     payload = api_settings.JWT_PAYLOAD_HANDLER(user)
@@ -10,7 +9,7 @@ def get_token_for_user(user):
 
 def get_user_from_token(token):
     if not is_token_valid(token):
-        raise WrongTokenException()
+        raise WrongTokenException("Token is not valid")
     payload = api_settings.JWT_DECODE_HANDLER(token)
     
     return payload
@@ -21,3 +20,6 @@ def is_token_valid(token):
         return True
     except:
         return False
+
+class WrongTokenException(Exception):
+    pass

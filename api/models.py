@@ -1,6 +1,6 @@
-from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
+from api.utils.models import serialize_model_list, serialize_user
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -11,11 +11,22 @@ class Post(models.Model):
         return len(Likes.objects.filter(post_id=self.id))
 
     def serialize(self):
+        likes = Likes.objects.filter(post_id=self.id)
+        likes = serialize_model_list(likes)
         return {
             "id": self.id,
-            "user_id": self.user.id,
-            "body": self.body}
+            "user": serialize_user(self.user),
+            "body": self.body,
+            "likes": likes
+            }
 
 class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": serialize_user(self.user),
+            "post_id": self.post.id}

@@ -3,8 +3,7 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from api.utils.jwt_token import get_user_from_token, get_token_for_user
-from api.exceptions import WrongTokenException
+from api.utils.jwt_token import get_user_from_token, get_token_for_user, WrongTokenException
 
 
 class SingUpView(APIView):
