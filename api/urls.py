@@ -7,6 +7,7 @@ urlpatterns = [
     path("users/get-user-data/", users.GetUserByIdView.as_view()),
     path("users/get-users-by-search/", users.GetUsersBySearchView.as_view()),
     path("user/", users.GetUserView.as_view()),
+    path("user/<int:user_id>/comments/", users.GetUserCommentsView.as_view()),
     
     path("posts/create/", posts.CreatePostView.as_view()),
     path("posts/user-get/<int:user_id>/", posts.GetUserPostsView.as_view()),

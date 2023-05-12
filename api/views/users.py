@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from api.utils.jwt_token import get_user_from_token, get_token_for_user, WrongTokenException
+from api.models import Comment
+from api.utils.models import serialize_model_list
 
 
 class SingUpView(APIView):
@@ -89,3 +91,12 @@ class GetUserView(APIView):
                 "message":"Unauthenticated"})
         user["success"] = True 
         return Response(user)
+
+class GetUserCommentsView(APIView):
+    def get(self, request, user_id):
+        comments = Comment.objects.filter(user_id=user_id)
+        comments = serialize_model_list(comments)
+        
+        return Response({
+            "comments": comments
+        })
