@@ -96,10 +96,10 @@ class TestViews(TestCase):
         self.assertEqual(response.data["username"], self.user.username)
         self.assertEqual(response.data["user_id"], self.user.id)
         
-        response = self.client.get("/api/user/",headers={"token":"wrong token"})
+        response = self.client.get("/api/user/", **{"token" : self.token})
         self.assertEqual(response.data["message"], "Wrong token")
         
-        response = self.client.post("/api/user/",headers={"token":self.token})
+        response = self.client.post("/api/user/", **{"token" : self.token})
         self.assertEqual(response.status_code, 405)
     
     # def test_logout_user(self):
