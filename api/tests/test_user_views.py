@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from api.models import User
-from api.views.users import get_token_for_user
+from api.utils.jwt_token import get_token_for_user
 
 class TestViews(TestCase):
     def setUp(self):
@@ -96,21 +96,8 @@ class TestViews(TestCase):
         self.assertEqual(response.data["username"], self.user.username)
         self.assertEqual(response.data["user_id"], self.user.id)
         
-        response = self.client.get("/api/user/", **{"token" : self.token})
+        response = self.client.get("/api/user/", **{"token" : "Wrong token"})
         self.assertEqual(response.data["message"], "Wrong token")
         
-        response = self.client.post("/api/user/", **{"token" : self.token})
+        response = self.client.post("/api/user/", **{"token" : "Wrong token"})
         self.assertEqual(response.status_code, 405)
-    
-    # def test_logout_user(self):
-    #     response = self.client.post("/api/users/sign-in/", 
-    #                                 {"username" : "Suabyak", 
-    #                                  "password" : "suabo"})
-    #     self.assertEqual(response.data["success"], True)
-        
-    #     response = self.client.post("/api/users/logout/", **{"token":response.data["token"]})
-    #     self.assertEqual(response.data["success"], True)
-    #     self.assertEqual(response.data.get("token"), None)
-        
-    #     response = self.client.post("/api/users/logout/", **{"token":response.data["token"]})
-    #     self.assertEqual(response.data["success"], False)

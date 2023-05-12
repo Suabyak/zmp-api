@@ -1,29 +1,16 @@
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-import jwt, zmp_api.settings as settings
-from rest_framework_jwt.settings import api_settings
 from rest_framework.permissions import AllowAny
-
-def get_token_for_user(user):
-    payload = api_settings.JWT_PAYLOAD_HANDLER(user)
-    token = api_settings.JWT_ENCODE_HANDLER(payload)
-    
-    return token
-
-def get_user_from_token(token):
-    payload = api_settings.JWT_DECODE_HANDLER(token)
-    
-    return payload
+from api.utils.jwt_token import get_user_from_token, get_token_for_user
+from api.exceptions import WrongTokenException
 
 
 class SingUpView(APIView):
     permission_classes = (AllowAny,)
     
     def post(self, request):
-        # print(request.data)
         if (request.data["password"] != request.data["password_confirm"]):  
             return Response({
                 "success":False, 
@@ -92,7 +79,7 @@ class GetUserView(APIView):
             return Response({
                 "success":False, 
                 "message":"Token not provided"})
-        except:
+        except WrongTokenException:
             return Response({
                 "success":False, 
                 "message":"Wrong token"})
@@ -103,18 +90,3 @@ class GetUserView(APIView):
                 "message":"Unauthenticated"})
         user["success"] = True 
         return Response(user)
-
-# class LogoutUserView(APIView):
-#     def post(self, request):
-        
-#         if not request.user.is_authenticated:
-#             return Response({
-#                 "success":False,
-#                 "message":"Not logged in"
-#             })
-#         logout(request)
-#         return Response({
-#             "success":True,
-#             "message":"Successfully logout"
-#         })
-        

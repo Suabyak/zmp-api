@@ -9,8 +9,8 @@ mysqlclient = "*"
 django-cors-headers = "*"
 pillow = "*"
 djangorestframework = "*"
-pyjwt = "*"
 djangorestframework-jwt = "==1.11.0"
+pyjwt = "*"
 
 [dev-packages]
 
