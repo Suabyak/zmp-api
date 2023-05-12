@@ -3,25 +3,25 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-import jwt, datetime, zmp_api.settings as settings
+import jwt, zmp_api.settings as settings
+from rest_framework_jwt.settings import api_settings
+from rest_framework.permissions import AllowAny
 
 def get_token_for_user(user):
-    payload = {
-        "id":user.id,
-        "exp":datetime.datetime.utcnow() + datetime.timedelta(minutes=30),
-        "iat":datetime.datetime.utcnow()
-    }
-    token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
+    payload = api_settings.JWT_PAYLOAD_HANDLER(user)
+    token = api_settings.JWT_ENCODE_HANDLER(payload)
     
     return token
 
 def get_user_from_token(token):
-    payload = jwt.decode(token, settings.SECRET_KEY, algorithms="HS256")
+    payload = api_settings.JWT_DECODE_HANDLER(token)
     
-    return User.objects.filter(id=payload["id"]).first()
+    return payload
 
 
 class SingUpView(APIView):
+    permission_classes = (AllowAny,)
+    
     def post(self, request):
         # print(request.data)
         if (request.data["password"] != request.data["password_confirm"]):  
@@ -39,20 +39,18 @@ class SingUpView(APIView):
 
 
 class SignInView(APIView):   
+    permission_classes = (AllowAny,)
+    
     def post(self, request):
-        print()
-        print(request.data)
         user = authenticate(username = request.data["username"], 
                             password = request.data["password"])
 
         if user is None:
-            print("user is none")
             return Response({
                 "success":False, 
                 "message":"Invalid username or password"})
-        login(request, user)
         token = get_token_for_user(user)
-        print("success")
+        
         return Response(
             {"success":True, 
              "message":"Successfully logged in",
@@ -89,7 +87,7 @@ class GetUsersBySearchView(APIView):
 class GetUserView(APIView):
     def get(self, request):
         try:
-            user = get_user_from_token(request.headers["token"])
+            user = get_user_from_token(request.META.get("token"))
         except KeyError:
             return Response({
                 "success":False, 
@@ -98,30 +96,25 @@ class GetUserView(APIView):
             return Response({
                 "success":False, 
                 "message":"Wrong token"})
-            
+        
         if user is None:
             return Response({
                 "success":False, 
                 "message":"Unauthenticated"})
-        
-        return Response({
-            "success":True,
-            "username":user.username,
-            "email":user.email,
-            "id":user.id
-        })
+        user["success"] = True 
+        return Response(user)
 
-class LogoutUserView(APIView):
-    def post(self, request):
-        response = Response({
-            "success":True,
-            "message":"Successfully logout"
-        })
-        if not request.user.is_authenticated:
-            return Response({
-                "success":False,
-                "message":"Not logged in"
-            })
-        logout(request)
-        return response
+# class LogoutUserView(APIView):
+#     def post(self, request):
+        
+#         if not request.user.is_authenticated:
+#             return Response({
+#                 "success":False,
+#                 "message":"Not logged in"
+#             })
+#         logout(request)
+#         return Response({
+#             "success":True,
+#             "message":"Successfully logout"
+#         })
         
