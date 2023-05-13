@@ -11,7 +11,6 @@ python -m pipenv install --dev
 4. Run/make migrations
 ```
 python -m pipenv shell
-python manage.py makemigrations
 python manage.py migrate
 ```
 5. Run dev server
