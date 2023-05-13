@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.models import Post, Likes, Comment
+from api.models import Post, Likes, Comment, Observation
 from api.utils.jwt_token import get_user_from_token, WrongTokenException
 from api.utils.models import serialize_model_list
 
@@ -182,4 +182,31 @@ class CommentPostView(APIView):
         
         return Response({
             "success": True
+        })
+
+
+class GetFeedView(APIView):
+    def get(self, request):
+        try:
+            user = get_user_from_token(request.META.get("token"))
+        except KeyError:
+            return Response({
+                "success":False, 
+                "message":"Token not provided"})
+        except WrongTokenException:
+            return Response({
+                "success":False, 
+                "message":"Wrong token"})
+        
+        observations = Observation.objects.filter(user=user["user_id"])
+        observations = serialize_model_list(observations)
+        
+        posts = list()
+        for observation in observations:
+            observed_posts = Post.objects.filter(user_id=observation["observed"]["id"])
+            posts.extend(serialize_model_list(observed_posts))
+        print(posts)
+        return Response({
+            "success": True,
+            "posts": posts
         })

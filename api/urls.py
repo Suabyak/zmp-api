@@ -8,6 +8,7 @@ urlpatterns = [
     path("users/get-users-by-search/", users.GetUsersBySearchView.as_view()),
     path("user/", users.GetUserView.as_view()),
     path("user/<int:user_id>/comments/", users.GetUserCommentsView.as_view()),
+    path("user/observe/", users.ObserveUserView.as_view()),
     
     path("posts/create/", posts.CreatePostView.as_view()),
     path("posts/user-get/<int:user_id>/", posts.GetUserPostsView.as_view()),
@@ -16,4 +17,6 @@ urlpatterns = [
     path("post/<int:post_id>/", posts.DeletePostView.as_view()),
     path("post/like/<int:post_id>/", posts.LikePostView.as_view()),
     path("post/<int:post_id>/comment/", posts.CommentPostView.as_view()),
+    path("get-feed/", posts.GetFeedView.as_view()),
+    
 ]

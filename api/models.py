@@ -42,4 +42,14 @@ class Comment(models.Model):
             "user": serialize_user(self.user),
             "post_id": self.post.id,
             "body": self.body}
+
+class Observation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="observator")
+    observed = models.ForeignKey(User, on_delete=models.CASCADE, related_name="observed")
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": serialize_user(self.user),
+            "observed": serialize_user(self.observed),}
     

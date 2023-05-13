@@ -2,9 +2,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
 from api.utils.jwt_token import get_user_from_token, get_token_for_user, WrongTokenException
-from api.models import Comment
+from api.models import Comment, Observation
 from api.utils.models import serialize_model_list
 
 
@@ -95,4 +94,31 @@ class GetUserCommentsView(APIView):
         
         return Response({
             "comments": comments
+        })
+
+class ObserveUserView(APIView):
+    def post(self, request):
+        try:
+            user = get_user_from_token(request.META.get("token"))
+        except KeyError:
+            return Response({
+                "success":False, 
+                "message":"Token not provided"})
+        except WrongTokenException:
+            return Response({
+                "success":False, 
+                "message":"Wrong token"})
+        to_observe = User.objects.filter(id=request.data["id"]).first()
+        
+        if to_observe is None:
+            return Response({
+                "success":False, 
+                "message":f"There is no User with id {request.data['id']}"})
+        
+        Observation.objects.create(
+            user=User.objects.filter(id=user["user_id"]).first(),
+            observed=to_observe)
+        
+        return Response({
+            "success":True, 
         })

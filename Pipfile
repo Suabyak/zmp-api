@@ -11,6 +11,9 @@ pillow = "*"
 djangorestframework = "*"
 djangorestframework-jwt = "==1.11.0"
 pyjwt = "*"
+django-rest-swagger = "*"
+pyyaml = "*"
+uritemplate = "*"
 
 [dev-packages]
 

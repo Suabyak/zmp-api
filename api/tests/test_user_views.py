@@ -1,8 +1,6 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
-from api.models import Comment
 from api.utils.jwt_token import get_token_for_user
-from api.utils.models import serialize_model_list
 
 class TestUserViews(TestCase):
     def setUp(self):
@@ -127,3 +125,16 @@ class TestUserViews(TestCase):
         response = self.client.get(f"/api/user/{self.user.id}/comments/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data["comments"]), 2)
+    
+    def test_add_observation(self):
+        response = self.client.post(f"/api/user/observe/", 
+                            {"id": self.user.id},
+                            **{"token" : self.token})
+        self.assertEqual(response.status_code, 200)
+        
+        # response = self.client.post(f"/api/user/observe/", 
+        #                     {"id": self.user.id},
+        #                     **{"token" : "Wrong token"})
+        # self.assertEqual(response.status_code, 200)
+    
+        

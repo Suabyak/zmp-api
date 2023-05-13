@@ -146,3 +146,21 @@ class TestPostViews(TestCase):
                                     {"body": "Fajny post :]"},
                                     **{"token" : "Wrong token"})
         self.assertEqual(response.data["success"], False)
+    
+    def test_get_feed(self):
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorem ipsum"}, 
+                                    **{"token" : self.token})
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorem ipsum"}, 
+                                    **{"token" : self.token})
+        response = self.client.post(f"/api/user/observe/", 
+                            {"id": self.user.id},
+                            **{"token" : self.token})
+        response = self.client.get(f"/api/get-feed/",
+                            **{"token" : self.token})
+        self.assertEqual(response.status_code, 200)
+        
+        # response = self.client.post(f"/api/user/get-feed/",
+        #                     **{"token" : "Wrong token"})
+        # self.assertEqual(response.status_code, 200)
