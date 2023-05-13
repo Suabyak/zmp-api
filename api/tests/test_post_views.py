@@ -36,8 +36,8 @@ class TestPostViews(TestCase):
         
         response = self.client.get(f"/api/posts/user-get/{self.user.id}/")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data["posts"]), 2)
-        self.assertEqual(response.data["posts"][1]["body"], "Lorua Merleu")
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data[1]["body"], "Lorua Merleu")
 
         response = self.client.get(f"/api/posts/user-get/1827368712638612836812686/")
         self.assertEqual(response.status_code, 530)

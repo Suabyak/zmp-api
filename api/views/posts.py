@@ -192,4 +192,4 @@ class GetFeedView(APIView):
         posts = posts.order_by("-created_at")
         posts = serialize_model_list(posts[:50])
         
-        return Response("posts": posts)
+        return Response(posts)
