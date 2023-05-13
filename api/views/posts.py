@@ -19,7 +19,8 @@ class CreatePostView(APIView):
         
         post = Post(
             body=request.data["body"],
-            user=user
+            user=user,
+            image=request.data["file"]
         )
         
         post.save()

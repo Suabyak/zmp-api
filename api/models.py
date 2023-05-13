@@ -6,7 +6,7 @@ from django.utils import timezone
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField()
-    image = models.TextField(blank=True, null=True)
+    image = models.TextField()
     created_at = models.DateTimeField(blank=True, null=True)
     
     def get_likes_amount(self):
@@ -19,6 +19,7 @@ class Post(models.Model):
             "id": self.id,
             "user": serialize_user(self.user),
             "body": self.body,
+            "file": self.image,
             "likes": likes,
             "total_likes": self.get_likes_amount(),
             "created_at": serialize_data(self.created_at)

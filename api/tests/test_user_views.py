@@ -104,7 +104,7 @@ class TestUserViews(TestCase):
     
     def test_get_comments_by_id(self):
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"}, 
+                                    {"body": "Lorem ipsum", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         

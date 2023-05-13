@@ -17,21 +17,21 @@ class TestPostViews(TestCase):
     
     def test_create_post(self):
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"}, 
+                                    {"body": "Lorem ipsum", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"},
+                                    {"body": "Lorem ipsum", "file":""},
                                     **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.status_code, 532)
     
     def test_get_user_posts(self):
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"}, 
+                                    {"body": "Lorem ipsum", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorua Merleu"}, 
+                                    {"body": "Lorua Merleu", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         
         response = self.client.get(f"/api/posts/user-get/{self.user.id}/")
@@ -44,10 +44,10 @@ class TestPostViews(TestCase):
     
     def test_get_post_by_id(self):
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"}, 
+                                    {"body": "Lorem ipsum", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorua Merleu"}, 
+                                    {"body": "Lorua Merleu", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
@@ -61,10 +61,10 @@ class TestPostViews(TestCase):
         
     def test_update_post(self):
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"}, 
+                                    {"body": "Lorem ipsum", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorua Merleu"}, 
+                                    {"body": "Lorua Merleu", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
@@ -85,11 +85,11 @@ class TestPostViews(TestCase):
     
     def test_delete_post(self):
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"}, 
+                                    {"body": "Lorem ipsum", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         id_wrong_test = response.data["id"]
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorua Merleu"}, 
+                                    {"body": "Lorua Merleu", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
@@ -105,7 +105,7 @@ class TestPostViews(TestCase):
     def test_like_post(self):
         
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"}, 
+                                    {"body": "Lorem ipsum", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
@@ -127,7 +127,7 @@ class TestPostViews(TestCase):
     def test_comment_post(self):
         
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"}, 
+                                    {"body": "Lorem ipsum", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
@@ -148,10 +148,10 @@ class TestPostViews(TestCase):
     
     def test_get_feed(self):
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"}, 
+                                    {"body": "Lorem ipsum", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.post("/api/posts/create/", 
-                                    {"body": "Lorem ipsum"}, 
+                                    {"body": "Lorem ipsum", "file":""}, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.post(f"/api/user/observe/", 
                             {"id": self.user.id},
