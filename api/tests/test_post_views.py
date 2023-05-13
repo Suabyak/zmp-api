@@ -70,7 +70,8 @@ class TestPostViews(TestCase):
         
         response = self.client.patch(f"/api/posts/update/{id}/", 
                                      {
-                                         "body": "Merleu Sorleu"
+                                         "body": "Merleu Sorleu", 
+                                         "file":""
                                      }, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
@@ -78,7 +79,8 @@ class TestPostViews(TestCase):
         
         response = self.client.patch(f"/api/posts/update/1827368712638612836812686/", 
                                      {
-                                         "body": "Merleu Sorleu"
+                                         "body": "Merleu Sorleu", 
+                                         "file":""
                                      }, 
                                     **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 533)

@@ -76,6 +76,7 @@ class UpdatePostView(APIView):
             return Response(status=534)
             
         post.body = request.data["body"]
+        post.file = request.data["file"]
         post.save()
         
         return Response()
