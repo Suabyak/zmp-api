@@ -41,9 +41,7 @@ class GetUserPostsView(APIView):
         posts = Post.objects.filter(user=user)
         posts = serialize_model_list(posts)
         
-        return Response({
-            "posts": posts
-        })
+        return Response(posts)
         
 class GetPostByIdView(APIView):
     def get(self, request, post_id):
@@ -194,6 +192,4 @@ class GetFeedView(APIView):
         posts = posts.order_by("-created_at")
         posts = serialize_model_list(posts[:50])
         
-        return Response({
-            "posts": posts
-        })
+        return Response("posts": posts)
