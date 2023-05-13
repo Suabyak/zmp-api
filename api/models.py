@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
-from api.utils.models import serialize_model_list, serialize_user
+from api.utils.models import serialize_model_list, serialize_user, serialize_data
+from django.utils import timezone
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField()
     image = models.ImageField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)
     
     def get_likes_amount(self):
         return len(Likes.objects.filter(post_id=self.id))
@@ -18,8 +20,14 @@ class Post(models.Model):
             "user": serialize_user(self.user),
             "body": self.body,
             "likes": likes,
-            "total_likes": self.get_likes_amount()
+            "total_likes": self.get_likes_amount(),
+            "created_at": serialize_data(self.created_at)
             }
+    
+    def save(self, *args, **kwargs):
+        self.created_at = timezone.now()
+        super(Post, self).save(*args, **kwargs)
+    
 
 class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
