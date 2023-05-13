@@ -9,7 +9,7 @@ class CreatePostView(APIView):
     
     def post(self, request):
         try:
-            user = get_user_from_token(request.META.get("token"))
+            user = get_user_from_token(request.META.get("Authorization"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)
@@ -59,7 +59,7 @@ class GetPostByIdView(APIView):
 class UpdatePostView(APIView):
     def patch(self, request, post_id):
         try:
-            user = get_user_from_token(request.META.get("token"))
+            user = get_user_from_token(request.META.get("Authorization"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)
@@ -85,7 +85,7 @@ class UpdatePostView(APIView):
 class DeletePostView(APIView):
     def delete(self, request, post_id):
         try:
-            user = get_user_from_token(request.META.get("token"))
+            user = get_user_from_token(request.META.get("Authorization"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)
@@ -111,7 +111,7 @@ class DeletePostView(APIView):
 class LikePostView(APIView):
     def post(self, request, post_id):
         try:
-            user = get_user_from_token(request.META.get("token"))
+            user = get_user_from_token(request.META.get("Authorization"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)
@@ -147,7 +147,7 @@ class LikePostView(APIView):
 class CommentPostView(APIView):
     def post(self, request, post_id):
         try:
-            user = get_user_from_token(request.META.get("token"))
+            user = get_user_from_token(request.META.get("Authorization"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)
@@ -175,7 +175,7 @@ class CommentPostView(APIView):
 class GetFeedView(APIView):
     def get(self, request):
         try:
-            user = get_user_from_token(request.META.get("token"))
+            user = get_user_from_token(request.META.get("Authorization"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)

@@ -92,25 +92,25 @@ class TestUserViews(TestCase):
         self.assertEqual(response.status_code, 405)
         
     def test_get_user(self):
-        response = self.client.get("/api/user/", **{"token" : self.token})
+        response = self.client.get("/api/user/", **{"Authorization" : self.token})
         self.assertEqual(response.data["username"], self.user.username)
         self.assertEqual(response.data["user_id"], self.user.id)
         
-        response = self.client.get("/api/user/", **{"token" : "Wrong token"})
+        response = self.client.get("/api/user/", **{"Authorization" : "Wrong token"})
         self.assertEqual(response.data["message"], "Wrong token")
         
-        response = self.client.post("/api/user/", **{"token" : "Wrong token"})
+        response = self.client.post("/api/user/", **{"Authorization" : "Wrong token"})
         self.assertEqual(response.status_code, 405)
     
     def test_get_comments_by_id(self):
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"token" : self.token})
+                                    **{"Authorization" : self.token})
         id = response.data['id']
         
         response = self.client.post(f"/api/post/{id}/comment/", 
                                     {"body": "Fajny post :]"},
-                                    **{"token" : self.token})
+                                    **{"Authorization" : self.token})
         self.assertEqual(response.status_code, 200)
         
         response = self.client.get(f"/api/user/{self.user.id}/comments/")
@@ -119,7 +119,7 @@ class TestUserViews(TestCase):
         
         response = self.client.post(f"/api/post/{id}/comment/", 
                                     {"body": "SUPER Fajny post :]"},
-                                    **{"token" : self.token})
+                                    **{"Authorization" : self.token})
         self.assertEqual(response.status_code, 200)
         
         response = self.client.get(f"/api/user/{self.user.id}/comments/")
@@ -129,12 +129,12 @@ class TestUserViews(TestCase):
     def test_add_observation(self):
         response = self.client.post(f"/api/user/observe/", 
                             {"id": self.user.id},
-                            **{"token" : self.token})
+                            **{"Authorization" : self.token})
         self.assertEqual(response.status_code, 200)
         
         # response = self.client.post(f"/api/user/observe/", 
         #                     {"id": self.user.id},
-        #                     **{"token" : "Wrong token"})
+        #                     **{"Authorization" : "Wrong token"})
         # self.assertEqual(response.status_code, 200)
     
         

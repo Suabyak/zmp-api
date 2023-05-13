@@ -70,7 +70,7 @@ class GetUsersBySearchView(APIView):
 class GetUserView(APIView):
     def get(self, request):
         try:
-            user = get_user_from_token(request.META.get("token"))
+            user = get_user_from_token(request.META.get("Authorization"))
         except KeyError:
             return Response({
                 "success":False, 
@@ -99,7 +99,7 @@ class GetUserCommentsView(APIView):
 class ObserveUserView(APIView):
     def post(self, request):
         try:
-            user = get_user_from_token(request.META.get("token"))
+            user = get_user_from_token(request.META.get("Authorization"))
         except KeyError:
             return Response({
                 "success":False, 
