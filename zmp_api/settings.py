@@ -81,10 +81,10 @@ WSGI_APPLICATION = 'zmp_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'zmp_social_app',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'NAME': 'sql7618055',
+        'USER': 'sql7618055',
+        'PASSWORD': 'fgGRYRpTSv',
+        'HOST': 'sql7.freemysqlhosting.net',
         'PORT': '3306',
         'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"},
     }

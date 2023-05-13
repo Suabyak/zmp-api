@@ -23,7 +23,7 @@ urlpatterns = [
     path('api/', include('api.urls')),
     
     path('api_schema/', get_schema_view("Api Docs"), name="api-schema"),
-    path('api/docs/', TemplateView.as_view(
+    path('', TemplateView.as_view(
         template_name="docs.html",
         extra_context={"schema_url":"api-schema"}
     ))
