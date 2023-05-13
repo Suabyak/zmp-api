@@ -8,6 +8,7 @@ def get_token_for_user(user):
     return token
 
 def get_user_from_token(token):
+    token = token.split(" ")[1]
     if not is_token_valid(token):
         raise WrongTokenException("Token is not valid")
     payload = api_settings.JWT_DECODE_HANDLER(token)

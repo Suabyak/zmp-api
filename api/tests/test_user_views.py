@@ -12,7 +12,7 @@ class TestUserViews(TestCase):
                           "password" : "suabo",
                           "password_confirm" : "suabo"})
         self.user = User.objects.first()
-        self.token = get_token_for_user(self.user)
+        self.token = f"Bearer {get_token_for_user(self.user)}"
     
     def test_sign_up_user(self):
         response = self.client.post("/api/users/sign-up/", 
@@ -92,25 +92,25 @@ class TestUserViews(TestCase):
         self.assertEqual(response.status_code, 405)
         
     def test_get_user(self):
-        response = self.client.get("/api/user/", **{"Authorization" : self.token})
+        response = self.client.get("/api/user/", **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.data["username"], self.user.username)
         self.assertEqual(response.data["user_id"], self.user.id)
         
-        response = self.client.get("/api/user/", **{"Authorization" : "Wrong token"})
+        response = self.client.get("/api/user/", **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.data["message"], "Wrong token")
         
-        response = self.client.post("/api/user/", **{"Authorization" : "Wrong token"})
+        response = self.client.post("/api/user/", **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.status_code, 405)
     
     def test_get_comments_by_id(self):
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
         response = self.client.post(f"/api/post/{id}/comment/", 
                                     {"body": "Fajny post :]"},
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         
         response = self.client.get(f"/api/user/{self.user.id}/comments/")
@@ -119,7 +119,7 @@ class TestUserViews(TestCase):
         
         response = self.client.post(f"/api/post/{id}/comment/", 
                                     {"body": "SUPER Fajny post :]"},
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         
         response = self.client.get(f"/api/user/{self.user.id}/comments/")
@@ -129,12 +129,12 @@ class TestUserViews(TestCase):
     def test_add_observation(self):
         response = self.client.post(f"/api/user/observe/", 
                             {"id": self.user.id},
-                            **{"Authorization" : self.token})
+                            **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         
         # response = self.client.post(f"/api/user/observe/", 
         #                     {"id": self.user.id},
-        #                     **{"Authorization" : "Wrong token"})
+        #                     **{"HTTP_AUTHORIZATION" : "Wrong token"})
         # self.assertEqual(response.status_code, 200)
     
         

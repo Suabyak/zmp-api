@@ -6,10 +6,9 @@ from api.utils.jwt_token import get_user_from_token, WrongTokenException
 from api.utils.models import serialize_model_list
 
 class CreatePostView(APIView):
-    
     def post(self, request):
         try:
-            user = get_user_from_token(request.META.get("Authorization"))
+            user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)
@@ -59,7 +58,7 @@ class GetPostByIdView(APIView):
 class UpdatePostView(APIView):
     def patch(self, request, post_id):
         try:
-            user = get_user_from_token(request.META.get("Authorization"))
+            user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)
@@ -85,7 +84,7 @@ class UpdatePostView(APIView):
 class DeletePostView(APIView):
     def delete(self, request, post_id):
         try:
-            user = get_user_from_token(request.META.get("Authorization"))
+            user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)
@@ -111,7 +110,7 @@ class DeletePostView(APIView):
 class LikePostView(APIView):
     def post(self, request, post_id):
         try:
-            user = get_user_from_token(request.META.get("Authorization"))
+            user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)
@@ -147,7 +146,7 @@ class LikePostView(APIView):
 class CommentPostView(APIView):
     def post(self, request, post_id):
         try:
-            user = get_user_from_token(request.META.get("Authorization"))
+            user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)
@@ -175,7 +174,7 @@ class CommentPostView(APIView):
 class GetFeedView(APIView):
     def get(self, request):
         try:
-            user = get_user_from_token(request.META.get("Authorization"))
+            user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
                 "message":"Token not provided"}, status=531)

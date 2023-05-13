@@ -13,26 +13,26 @@ class TestPostViews(TestCase):
                                     "password" : "suabo",
                                     "password_confirm" : "suabo"})
         self.user = User.objects.first()
-        self.token = get_token_for_user(self.user)
+        self.token = f"Bearer {get_token_for_user(self.user)}"
     
     def test_create_post(self):
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"},
-                                    **{"Authorization" : "Wrong token"})
+                                    **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.status_code, 532)
     
     def test_get_user_posts(self):
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorua Merleu"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         
         response = self.client.get(f"/api/posts/user-get/{self.user.id}/")
         self.assertEqual(response.status_code, 200)
@@ -45,10 +45,10 @@ class TestPostViews(TestCase):
     def test_get_post_by_id(self):
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorua Merleu"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
         response = self.client.get(f"/api/posts/get/{id}/")
@@ -62,17 +62,17 @@ class TestPostViews(TestCase):
     def test_update_post(self):
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorua Merleu"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
         response = self.client.patch(f"/api/posts/update/{id}/", 
                                      {
                                          "body": "Merleu Sorleu"
                                      }, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Post.objects.filter(id=id).first().body, "Merleu Sorleu")
         
@@ -80,47 +80,47 @@ class TestPostViews(TestCase):
                                      {
                                          "body": "Merleu Sorleu"
                                      }, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 533)
     
     def test_delete_post(self):
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         id_wrong_test = response.data["id"]
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorua Merleu"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
         response = self.client.delete(f"/api/post/{id}/",
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Post.objects.filter(id=id).first(), None)
         
         response = self.client.delete(f"/api/post/{id_wrong_test}/",
-                                    **{"Authorization" : "Wrong token"})
+                                    **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.status_code, 532)
     
     def test_like_post(self):
         
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
         response = self.client.post(f"/api/post/like/{id}/", 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Post.objects.filter(id=id).first().get_likes_amount(), 1)
         
         response = self.client.post(f"/api/post/like/{id}/", 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Post.objects.filter(id=id).first().get_likes_amount(), 0)
         
         response = self.client.post(f"/api/post/like/{id}/",
-                                    **{"Authorization" : "Wrong token"})
+                                    **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.status_code, 532)
         
         
@@ -128,38 +128,38 @@ class TestPostViews(TestCase):
         
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         id = response.data['id']
         
         response = self.client.post(f"/api/post/{id}/comment/", 
                                     {"body": "Fajny post :]"},
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         
         response = self.client.post(f"/api/post/1236787654334567/comment/", 
                                     {"body": "Fajny post :]"},
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 530)
         
         response = self.client.post(f"/api/post/{id}/comment/", 
                                     {"body": "Fajny post :]"},
-                                    **{"Authorization" : "Wrong token"})
+                                    **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.status_code, 532)
     
     def test_get_feed(self):
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum"}, 
-                                    **{"Authorization" : self.token})
+                                    **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.post(f"/api/user/observe/", 
                             {"id": self.user.id},
-                            **{"Authorization" : self.token})
+                            **{"HTTP_AUTHORIZATION" : self.token})
         response = self.client.get(f"/api/posts/get-feed/",
-                            **{"Authorization" : self.token})
+                            **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         
         response = self.client.get(f"/api/posts/get-feed/",
-                            **{"Authorization" : "Wrong token"})
+                            **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.status_code, 532)
