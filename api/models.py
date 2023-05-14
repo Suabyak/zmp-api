@@ -58,9 +58,7 @@ class Observation(models.Model):
         return {
             "id": self.id,
             "user": serialize_user(self.user),
-            "user_profile": Profile.getByUser(self.user),
-            "observed": serialize_user(self.observed),
-            "user_profile": Profile.getByUser(self.user),}
+            "observed": serialize_user(self.observed)}
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from api.utils.jwt_token import get_user_from_token, get_token_for_user, WrongTokenException
 from api.models import Comment, Observation, Profile
-from api.utils.models import serialize_model_list, serialize_user_list
+from api.utils.models import serialize_model_list, serialize_user_list, serialize_user
 
 
 class SingUpView(APIView):    
@@ -79,10 +79,7 @@ class GetUserByIdView(APIView):
                 "message":f"There is no User with id {request.GET.get('id')}"},
                             status=530)
         
-        return Response({
-            "success":True, 
-            "username":user.username
-        })
+        return Response(serialize_user(user))
 
 class GetUsersBySearchView(APIView):
     def get(self, request):  
