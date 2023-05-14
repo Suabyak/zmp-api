@@ -24,7 +24,7 @@ class CreatePostView(APIView):
         except WrongTokenException:
             return Response({
                 "message":"Wrong token"}, status=531)
-        user = User.objects.filter(id=user["user_id"]).first()
+        user = User.objects.filter(id=user["id"]).first()
 
         post = Post.objects.create(body=request.data["body"],
                                     user=user,
@@ -86,7 +86,7 @@ class UpdatePostView(APIView):
                 "message": f"There is no post with {post_id} id"
             }, status=530)
             
-        if post.user.id != user["user_id"]:
+        if post.user.id != user["id"]:
             return Response(status=530)
             
         post.body = request.data["body"]
@@ -114,7 +114,7 @@ class DeletePostView(APIView):
             }, status=530)
         
             
-        if post.user.id != user["user_id"]:
+        if post.user.id != user["id"]:
             return Response(status=534)
             
         post.delete()
@@ -140,17 +140,17 @@ class LikePostView(APIView):
             }, status=530)
             
             
-        if post.user.id != user["user_id"]:
+        if post.user.id != user["id"]:
             return Response(status=530)
         
-        likes = Likes.objects.filter(user_id=user["user_id"], post_id=post.id).first()
+        likes = Likes.objects.filter(user_id=user["id"], post_id=post.id).first()
         if likes is not None:
             likes.delete()
         
             return Response()
         
         Likes.objects.create(post = post,
-            user = User.objects.filter(id=user["user_id"]).first())
+            user = User.objects.filter(id=user["id"]).first())
         
         return Response()
         
@@ -181,7 +181,7 @@ class CommentPostView(APIView):
             }, status=530)
             
         comment = Comment.objects.create(post = post,
-            user = User.objects.filter(id=user["user_id"]).first(),
+            user = User.objects.filter(id=user["id"]).first(),
             body = request.data["body"])
         
         return Response()
@@ -198,7 +198,7 @@ class GetFeedView(APIView):
             return Response({
                 "message":"Wrong token"}, status=531)
         
-        observations = Observation.objects.filter(user=user["user_id"])
+        observations = Observation.objects.filter(user=user["id"])
         observations = serialize_model_list(observations)
         
         posts = Post.objects.none()

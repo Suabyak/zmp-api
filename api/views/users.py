@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from api.utils.jwt_token import get_user_from_token, get_token_for_user, WrongTokenException
 from api.models import Comment, Observation, Profile
-from api.utils.models import serialize_model_list, serialize_user_list
+from api.utils.models import serialize_model_list, serialize_user_list, serialize_user
 
 
 class SingUpView(APIView):    
@@ -58,7 +58,7 @@ class SignInView(APIView):
         return Response(
             {"success":True, 
              "message":"Successfully logged in",
-             "user_id":user.id,
+             "id":user.id,
              "token":token})
         
 class GetUserByIdView(APIView):
@@ -79,10 +79,7 @@ class GetUserByIdView(APIView):
                 "message":f"There is no User with id {request.GET.get('id')}"},
                             status=530)
         
-        return Response({
-            "success":True, 
-            "username":user.username
-        })
+        return Response(serialize_user(user))
 
 class GetUsersBySearchView(APIView):
     def get(self, request):  
@@ -160,7 +157,7 @@ class ObserveUserView(APIView):
                 "message":f"There is no User with id {request.data['id']}"},
                             status=530)
         
-        observation = Observation.objects.filter(user_id=user["user_id"], observed_id=to_observe.id).first()
+        observation = Observation.objects.filter(user_id=user["id"], observed_id=to_observe.id).first()
         if observation is not None:
             observation.delete()
             
@@ -169,7 +166,7 @@ class ObserveUserView(APIView):
             })
         
         Observation.objects.create(
-            user=User.objects.filter(id=user["user_id"]).first(),
+            user=User.objects.filter(id=user["id"]).first(),
             observed=to_observe)
         
         return Response({
@@ -188,7 +185,7 @@ class SetProfileView(APIView):
             }, status = 530)
             
         try:
-            user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
+            user = get_user_from_token(request.META["HTTP_AUTHORIZATION"])
         except KeyError:
             return Response({
                 "success":False, 
@@ -200,7 +197,7 @@ class SetProfileView(APIView):
                 "message":"Wrong token"},
                             status=531)
 
-        profile = Profile.objects.filter(user_id=user["user_id"]).first()
+        profile = Profile.objects.filter(user_id=user["id"]).first()
         profile.image = request.data["file"]
         profile.save()
         
@@ -224,7 +221,7 @@ class GetObservedView(APIView):
                 "message":"Wrong token"},
                             status=531)
     
-        observed = Observation.objects.filter(user_id=user["user_id"])
+        observed = Observation.objects.filter(user_id=user["id"])
         observed = serialize_model_list(observed)
         
         return Response(observed)

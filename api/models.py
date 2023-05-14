@@ -18,7 +18,6 @@ class Post(models.Model):
         return {
             "id": self.id,
             "user": serialize_user(self.user),
-            "user_profile": Profile.getByUser(self.user),
             "body": self.body,
             "file": self.image,
             "likes": likes,
@@ -47,7 +46,6 @@ class Comment(models.Model):
         return {
             "id": self.id,
             "user": serialize_user(self.user),
-            "user_profile": Profile.getByUser(self.user),
             "post_id": self.post.id,
             "body": self.body}
 
@@ -59,16 +57,10 @@ class Observation(models.Model):
         return {
             "id": self.id,
             "user": serialize_user(self.user),
-            "user_profile": Profile.getByUser(self.user),
-            "observed": serialize_user(self.observed),
-            "user_profile": Profile.getByUser(self.user),}
+            "observed": serialize_user(self.observed)}
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.TextField(blank=True, null=True)
     def serialize(self):
         return self.image
-    
-    def getByUser(user):
-        profile = Profile.objects.filter(user=user).first()
-        return profile.serialize()
