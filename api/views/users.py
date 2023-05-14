@@ -113,12 +113,12 @@ class GetUserView(APIView):
             return Response({
                 "success":False, 
                 "message":"Token not provided"},
-                            status=530)
+                            status=531)
         except WrongTokenException:
             return Response({
                 "success":False, 
                 "message":"Wrong token"},
-                            status=530)
+                            status=531)
         
         if user is None:
             return Response({
@@ -153,12 +153,12 @@ class ObserveUserView(APIView):
             return Response({
                 "success":False, 
                 "message":"Token not provided"},
-                            status=530)
+                            status=531)
         except WrongTokenException:
             return Response({
                 "success":False, 
                 "message":"Wrong token"},
-                            status=530)
+                            status=531)
         to_observe = User.objects.filter(id=request.data["id"]).first()
         
         if to_observe is None:
@@ -166,6 +166,14 @@ class ObserveUserView(APIView):
                 "success":False, 
                 "message":f"There is no User with id {request.data['id']}"},
                             status=530)
+        
+        observation = Observation.objects.filter(user_id=user["user_id"], observed_id=to_observe.id).first()
+        if observation is not None:
+            observation.delete()
+            
+            return Response({
+                "success":True, 
+            })
         
         Observation.objects.create(
             user=User.objects.filter(id=user["user_id"]).first(),
@@ -192,12 +200,12 @@ class SetProfileView(APIView):
             return Response({
                 "success":False, 
                 "message":"Token not provided"},
-                            status=530)
+                            status=531)
         except WrongTokenException:
             return Response({
                 "success":False, 
                 "message":"Wrong token"},
-                            status=530)
+                            status=531)
 
         profile = Profile.objects.filter(user_id=user["user_id"]).first()
         profile.image = request.data["file"]
@@ -206,3 +214,24 @@ class SetProfileView(APIView):
         return Response({
             "success":True, 
         })
+
+
+class GetObservedView(APIView):
+    def get(self, request):
+        try:
+            user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
+        except KeyError:
+            return Response({
+                "success":False, 
+                "message":"Token not provided"},
+                            status=531)
+        except WrongTokenException:
+            return Response({
+                "success":False, 
+                "message":"Wrong token"},
+                            status=531)
+    
+        observed = Observation.objects.filter(user_id=user["user_id"])
+        observed = serialize_model_list(observed)
+        
+        return Response(observed)

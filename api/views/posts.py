@@ -20,10 +20,10 @@ class CreatePostView(APIView):
             user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
-                "message":"Token not provided"}, status=530)
+                "message":"Token not provided"}, status=531)
         except WrongTokenException:
             return Response({
-                "message":"Wrong token"}, status=530)
+                "message":"Wrong token"}, status=531)
         user = User.objects.filter(id=user["user_id"]).first()
 
         post = Post.objects.create(body=request.data["body"],
@@ -77,7 +77,7 @@ class UpdatePostView(APIView):
                 "message":"Token not provided"}, status=531)
         except WrongTokenException:
             return Response({
-                "message":"Wrong token"}, status=530)
+                "message":"Wrong token"}, status=531)
             
         post = Post.objects.filter(id=post_id).first()
         
@@ -101,10 +101,10 @@ class DeletePostView(APIView):
             user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
-                "message":"Token not provided"}, status=530)
+                "message":"Token not provided"}, status=531)
         except WrongTokenException:
             return Response({
-                "message":"Wrong token"}, status=530)
+                "message":"Wrong token"}, status=531)
             
         post = Post.objects.filter(id=post_id).first()
         
@@ -127,10 +127,10 @@ class LikePostView(APIView):
             user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
-                "message":"Token not provided"}, status=530)
+                "message":"Token not provided"}, status=531)
         except WrongTokenException:
             return Response({
-                "message":"Wrong token"}, status=530)
+                "message":"Wrong token"}, status=531)
             
         post = Post.objects.filter(id=post_id).first()
         
@@ -149,7 +149,7 @@ class LikePostView(APIView):
         
             return Response()
         
-        likes = Likes.objects.create(post = post,
+        Likes.objects.create(post = post,
             user = User.objects.filter(id=user["user_id"]).first())
         
         return Response()
@@ -168,10 +168,10 @@ class CommentPostView(APIView):
             user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
-                "message":"Token not provided"}, status=530)
+                "message":"Token not provided"}, status=531)
         except WrongTokenException:
             return Response({
-                "message":"Wrong token"}, status=530)
+                "message":"Wrong token"}, status=531)
             
         post = Post.objects.filter(id=post_id).first()
         
@@ -193,10 +193,10 @@ class GetFeedView(APIView):
             user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
-                "message":"Token not provided"}, status=530)
+                "message":"Token not provided"}, status=531)
         except WrongTokenException:
             return Response({
-                "message":"Wrong token"}, status=530)
+                "message":"Wrong token"}, status=531)
         
         observations = Observation.objects.filter(user=user["user_id"])
         observations = serialize_model_list(observations)
