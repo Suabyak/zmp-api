@@ -83,15 +83,15 @@ class TestUserViews(TestCase):
     def test_get_users_by_search(self):
         response = self.client.get("/api/users/get-users-by-search/", 
                                     {"search" : "abya"})
-        self.assertEqual(response.data["users"][0]["username"], self.user.username)
+        self.assertEqual(response.data[0]["username"], self.user.username)
         
         response = self.client.get("/api/users/get-users-by-search/", 
                                     {"search" : "Suabyak"})
-        self.assertEqual(response.data["users"][0]["username"], self.user.username)
+        self.assertEqual(response.data[0]["username"], self.user.username)
         
         response = self.client.get("/api/users/get-users-by-search/", 
                                     {"search" : "Suabyako"})
-        self.assertEqual(response.data["users"], [])
+        self.assertEqual(response.data, [])
         
         response = self.client.post("/api/users/get-users-by-search/", 
                                     {"search" : "Suabyako"})
@@ -121,7 +121,7 @@ class TestUserViews(TestCase):
         
         response = self.client.get(f"/api/user/{self.user.id}/comments/")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data["comments"]), 1)
+        self.assertEqual(len(response.data), 1)
         
         response = self.client.post(f"/api/post/{id}/comment/", 
                                     {"body": "SUPER Fajny post :]"},
@@ -130,7 +130,7 @@ class TestUserViews(TestCase):
         
         response = self.client.get(f"/api/user/{self.user.id}/comments/")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data["comments"]), 2)
+        self.assertEqual(len(response.data), 2)
     
     def test_add_observation(self):
         response = self.client.post(f"/api/user/observe/", 
