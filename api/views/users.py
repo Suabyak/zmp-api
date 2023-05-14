@@ -206,3 +206,24 @@ class SetProfileView(APIView):
         return Response({
             "success":True, 
         })
+
+
+class GetObservedView(APIView):
+    def get(self, request):
+        try:
+            user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
+        except KeyError:
+            return Response({
+                "success":False, 
+                "message":"Token not provided"},
+                            status=530)
+        except WrongTokenException:
+            return Response({
+                "success":False, 
+                "message":"Wrong token"},
+                            status=530)
+    
+        observed = Observation.objects.filter(user_id=user["user_id"])
+        observed = serialize_model_list(observed)
+        
+        return Response(observed)

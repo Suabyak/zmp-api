@@ -168,3 +168,25 @@ class TestUserViews(TestCase):
                             {"file": "zdjencie"},
                             **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.status_code, 530)
+    
+    def test_get_observed(self):
+        response = self.client.post(f"/api/user/observe/", 
+                            {"id": self.user.id},
+                            **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client.get("/api/user/observed/",
+                            **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        
+        response = self.client.post(f"/api/user/observe/", 
+                            {"id": self.user.id},
+                            **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client.get("/api/user/observed/",
+                            **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 0)
+        
