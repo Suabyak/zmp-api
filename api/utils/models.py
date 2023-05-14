@@ -11,9 +11,12 @@ def serialize_model_list(model_list):
     return new_list
 
 def serialize_user(user):
+    from api.models import Profile
+    profile = Profile.objects.filter(user_id=user.id).first()
     return {
         "id": user.id,
-        "username": user.username}
+        "username": user.username,
+        "file": profile.image}
 
 def serialize_data(data):
     return {
