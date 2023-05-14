@@ -101,9 +101,7 @@ class GetUsersBySearchView(APIView):
             users_lsit.append({"username":user.username, 
                             "id":user.id})
             
-        return Response({
-            "users":users_lsit
-        })
+        return Response(users_lsit)
 
 class GetUserView(APIView):
     def get(self, request):
@@ -133,9 +131,7 @@ class GetUserCommentsView(APIView):
         comments = Comment.objects.filter(user_id=user_id)
         comments = serialize_model_list(comments)
         
-        return Response({
-            "comments": comments
-        })
+        return Response(comments)
 
 class ObserveUserView(APIView):
     def post(self, request):
