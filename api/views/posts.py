@@ -8,6 +8,15 @@ from api.utils.models import serialize_model_list
 class CreatePostView(APIView):
     def post(self, request):
         try:
+            request.data["body"]
+            request.data["file"]
+        except KeyError:
+            return Response({
+                "success":False,
+            "message":"Wrong data send"
+            }, status = 530)
+            
+        try:
             user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
@@ -56,6 +65,15 @@ class GetPostByIdView(APIView):
 
 class UpdatePostView(APIView):
     def patch(self, request, post_id):
+        try:
+            request.data["body"]
+            request.data["file"]
+        except KeyError:
+            return Response({
+                "success":False,
+            "message":"Wrong data send"
+            }, status = 530)
+            
         try:
             user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
@@ -146,6 +164,14 @@ class LikePostView(APIView):
 class CommentPostView(APIView):
     def post(self, request, post_id):
         try:
+            request.data["body"]
+        except KeyError:
+            return Response({
+                "success":False,
+            "message":"Wrong data send"
+            }, status = 530)
+            
+        try:
             user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
         except KeyError:
             return Response({
@@ -194,3 +220,17 @@ class GetFeedView(APIView):
         posts = serialize_model_list(posts[:50])
         
         return Response(posts)
+
+class GetPostCommentsView(APIView):
+    def get(self, request, post_id):
+        post = Post.objects.filter(id=post_id).first()
+        
+        if post is None:
+            return Response({
+                "message": f"There is no post with {post_id} id"
+            }, status=530)
+        
+        comments = Comment.objects.filter(post_id=post_id)
+        comments = serialize_model_list(comments)
+
+        return Response(comments)

@@ -66,8 +66,7 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.TextField(blank=True, null=True)
     def serialize(self):
-        return {
-            "file": self.image}
+        return self.image
     
     def getByUser(user):
         profile = Profile.objects.filter(user=user).first()

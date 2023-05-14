@@ -165,3 +165,36 @@ class TestPostViews(TestCase):
         response = self.client.get(f"/api/posts/get-feed/",
                             **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.status_code, 530)
+    
+    def test_get_post_comments(self):
+
+        response = self.client.post("/api/posts/create/", 
+                                    {"body": "Lorem ipsum", "file":""}, 
+                                    **{"HTTP_AUTHORIZATION" : self.token})
+        id = response.data['id']
+
+        response = self.client.post(f"/api/post/{id}/comment/", 
+                                    {"body": "Fajny post :]"},
+                                    **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client.post(f"/api/post/{id}/comment/", 
+                                    {"body": "Ale kto pytal?"},
+                                    **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(f"/api/post/{id}/comments/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+        
+        response = self.client.post(f"/api/post/{id}/comment/", 
+                                    {"body": "Ja pytalem :]"},
+                                    **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(f"/api/post/{id}/comments/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 3)
+        
+        response = self.client.get(f"/api/post/12345/comments/")
+        self.assertEqual(response.status_code, 530)
