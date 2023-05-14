@@ -95,13 +95,10 @@ class GetUsersBySearchView(APIView):
             }, status = 530)
             
         users = User.objects.filter(username__contains=request.GET.get("search"))
-        
-        users_lsit = list()
-        for user in users:
-            users_lsit.append({"username":user.username, 
-                            "id":user.id})
+        users = serialize_model_list(users)
             
-        return Response(users_lsit)
+            
+        return Response(users)
 
 class GetUserView(APIView):
     def get(self, request):
