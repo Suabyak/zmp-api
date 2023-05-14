@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-import os
+import os, datetime
 from pathlib import Path
 
 # Build paths inside the proje ct like this: BASE_DIR / 'subdir'.
@@ -136,7 +136,9 @@ CORS_ALLOW_CREDENTIALS = True
 
 JWT_SECRET_KEY = 'my_secret_key'
 JWT_ALGORITHM = 'HS256'
-
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
+}
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
