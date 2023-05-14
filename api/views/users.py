@@ -9,16 +9,26 @@ from api.utils.models import serialize_model_list
 
 class SingUpView(APIView):    
     def post(self, request):
+        try:
+            request.data["username"]
+            request.data["email"]
+            request.data["password"]
+            request.data["password_confirm"]
+        except KeyError:
+            return Response({
+                "success":False,
+            "message":"Wrong data send"
+            }, status = 530)
+            
         if (request.data["password"] != request.data["password_confirm"]):  
             return Response({
                 "success":False, 
                 "message":"Passwords are not the same"},
                             status=530)
-        
         User.objects.create_user(username = request.data["username"],
                                 email = request.data["email"],
                                 password = request.data["password"])
-        
+            
         return Response({
             "success":True, 
             "message":"Successfully signed up"})

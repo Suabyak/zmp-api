@@ -50,7 +50,7 @@ class GetPostByIdView(APIView):
         if post is None:
             return Response({
                 "message": f"There is no post with {post_id} id"
-            }, status=533)
+            }, status=530)
 
         return Response(post.serialize())
 
@@ -70,7 +70,7 @@ class UpdatePostView(APIView):
         if post is None:
             return Response({
                 "message": f"There is no post with {post_id} id"
-            }, status=533)
+            }, status=530)
             
         if post.user.id != user["user_id"]:
             return Response(status=530)
@@ -97,7 +97,7 @@ class DeletePostView(APIView):
         if post is None:
             return Response({
                 "message": f"There is no post with {post_id} id"
-            }, status=533)
+            }, status=530)
         
             
         if post.user.id != user["user_id"]:
@@ -123,7 +123,7 @@ class LikePostView(APIView):
         if post is None:
             return Response({
                 "message": f"There is no post with {post_id} id"
-            }, status=533)
+            }, status=530)
             
             
         if post.user.id != user["user_id"]:
