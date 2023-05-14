@@ -138,21 +138,17 @@ class LikePostView(APIView):
             return Response({
                 "message": f"There is no post with {post_id} id"
             }, status=530)
-            
-            
-        if post.user.id != user["id"]:
-            return Response(status=530)
         
         likes = Likes.objects.filter(user_id=user["id"], post_id=post.id).first()
         if likes is not None:
             likes.delete()
         
-            return Response()
+            return Response({"message":"Like removed"})
         
         Likes.objects.create(post = post,
             user = User.objects.filter(id=user["id"]).first())
         
-        return Response()
+        return Response({"message":"Like added"})
         
 class CommentPostView(APIView):
     def post(self, request, post_id):
