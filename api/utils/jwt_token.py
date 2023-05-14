@@ -14,7 +14,7 @@ def get_user_from_token(token):
     if not is_token_valid(token):
         raise WrongTokenException("Token is not valid")
     payload = api_settings.JWT_DECODE_HANDLER(token)
-    user = User.objects.filter(id=payload["id"]).first()
+    user = User.objects.filter(id=payload["user_id"]).first()
     user = serialize_user(user)
     return user
 

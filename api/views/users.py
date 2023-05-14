@@ -188,7 +188,7 @@ class SetProfileView(APIView):
             }, status = 530)
             
         try:
-            user = get_user_from_token(request.META.get("HTTP_AUTHORIZATION"))
+            user = get_user_from_token(request.META["HTTP_AUTHORIZATION"])
         except KeyError:
             return Response({
                 "success":False, 
