@@ -25,9 +25,17 @@ class SingUpView(APIView):
                 "success":False, 
                 "message":"Passwords are not the same"},
                             status=530)
-        user = User.objects.create_user(username = request.data["username"],
-                                email = request.data["email"],
-                                password = request.data["password"])
+            
+        try:
+            user = User.objects.create_user(username = request.data["username"],
+                                    email = request.data["email"],
+                                    password = request.data["password"])
+        except:
+            return Response({
+                "success":False, 
+                "message":"This email is in use"},
+                            status=530)
+                
         Profile.objects.create(user=user, image="")
         return Response({
             "success":True, 
