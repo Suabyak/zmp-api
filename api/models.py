@@ -47,7 +47,6 @@ class Comment(models.Model):
         return {
             "id": self.id,
             "user": serialize_user(self.user),
-            "user_profile": Profile.getByUser(self.user),
             "post_id": self.post.id,
             "body": self.body}
 
@@ -68,7 +67,3 @@ class Profile(models.Model):
     image = models.TextField(blank=True, null=True)
     def serialize(self):
         return self.image
-    
-    def getByUser(user):
-        profile = Profile.objects.filter(user=user).first()
-        return profile.serialize()
