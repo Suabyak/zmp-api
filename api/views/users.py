@@ -58,7 +58,7 @@ class SignInView(APIView):
         return Response(
             {"success":True, 
              "message":"Successfully logged in",
-             "user_id":user.id,
+             "id":user.id,
              "token":token})
         
 class GetUserByIdView(APIView):
@@ -160,7 +160,7 @@ class ObserveUserView(APIView):
                 "message":f"There is no User with id {request.data['id']}"},
                             status=530)
         
-        observation = Observation.objects.filter(user_id=user["user_id"], observed_id=to_observe.id).first()
+        observation = Observation.objects.filter(user_id=user["id"], observed_id=to_observe.id).first()
         if observation is not None:
             observation.delete()
             
@@ -169,7 +169,7 @@ class ObserveUserView(APIView):
             })
         
         Observation.objects.create(
-            user=User.objects.filter(id=user["user_id"]).first(),
+            user=User.objects.filter(id=user["id"]).first(),
             observed=to_observe)
         
         return Response({
@@ -200,7 +200,7 @@ class SetProfileView(APIView):
                 "message":"Wrong token"},
                             status=531)
 
-        profile = Profile.objects.filter(user_id=user["user_id"]).first()
+        profile = Profile.objects.filter(user_id=user["id"]).first()
         profile.image = request.data["file"]
         profile.save()
         
@@ -224,7 +224,7 @@ class GetObservedView(APIView):
                 "message":"Wrong token"},
                             status=531)
     
-        observed = Observation.objects.filter(user_id=user["user_id"])
+        observed = Observation.objects.filter(user_id=user["id"])
         observed = serialize_model_list(observed)
         
         return Response(observed)

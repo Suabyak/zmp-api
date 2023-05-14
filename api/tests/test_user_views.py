@@ -100,7 +100,7 @@ class TestUserViews(TestCase):
     def test_get_user(self):
         response = self.client.get("/api/user/", **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.data["username"], self.user.username)
-        self.assertEqual(response.data["user_id"], self.user.id)
+        self.assertEqual(response.data["id"], self.user.id)
         
         response = self.client.get("/api/user/", **{"HTTP_AUTHORIZATION" : "Wrong token"})
         self.assertEqual(response.data["message"], "Wrong token")
