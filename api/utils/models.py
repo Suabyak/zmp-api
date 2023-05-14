@@ -1,3 +1,9 @@
+def serialize_user_list(user_list):
+    new_list = list()
+    for user in user_list:
+        new_list.append(serialize_user(user))
+    return new_list
+
 def serialize_model_list(model_list):
     new_list = list()
     for element in model_list:
