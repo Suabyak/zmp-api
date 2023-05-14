@@ -24,7 +24,7 @@ class TestPostViews(TestCase):
         response = self.client.post("/api/posts/create/", 
                                     {"body": "Lorem ipsum", "file":""},
                                     **{"HTTP_AUTHORIZATION" : "Wrong token"})
-        self.assertEqual(response.status_code, 530)
+        self.assertEqual(response.status_code, 531)
     
     def test_get_user_posts(self):
         response = self.client.post("/api/posts/create/", 
@@ -102,7 +102,7 @@ class TestPostViews(TestCase):
         
         response = self.client.delete(f"/api/post/{id_wrong_test}/",
                                     **{"HTTP_AUTHORIZATION" : "Wrong token"})
-        self.assertEqual(response.status_code, 530)
+        self.assertEqual(response.status_code, 531)
     
     def test_like_post(self):
         
@@ -123,7 +123,7 @@ class TestPostViews(TestCase):
         
         response = self.client.post(f"/api/post/like/{id}/",
                                     **{"HTTP_AUTHORIZATION" : "Wrong token"})
-        self.assertEqual(response.status_code, 530)
+        self.assertEqual(response.status_code, 531)
         
         
     def test_comment_post(self):
@@ -146,7 +146,7 @@ class TestPostViews(TestCase):
         response = self.client.post(f"/api/post/{id}/comment/", 
                                     {"body": "Fajny post :]"},
                                     **{"HTTP_AUTHORIZATION" : "Wrong token"})
-        self.assertEqual(response.status_code, 530)
+        self.assertEqual(response.status_code, 531)
     
     def test_get_feed(self):
         response = self.client.post("/api/posts/create/", 
@@ -164,7 +164,7 @@ class TestPostViews(TestCase):
         
         response = self.client.get(f"/api/posts/get-feed/",
                             **{"HTTP_AUTHORIZATION" : "Wrong token"})
-        self.assertEqual(response.status_code, 530)
+        self.assertEqual(response.status_code, 531)
     
     def test_get_post_comments(self):
 

@@ -167,7 +167,7 @@ class TestUserViews(TestCase):
         response = self.client.post(f"/api/user/profile/set/", 
                             {"file": "zdjencie"},
                             **{"HTTP_AUTHORIZATION" : "Wrong token"})
-        self.assertEqual(response.status_code, 530)
+        self.assertEqual(response.status_code, 531)
     
     def test_get_observed(self):
         response = self.client.post(f"/api/user/observe/", 
