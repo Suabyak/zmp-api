@@ -39,7 +39,7 @@ class TestPostViews(TestCase):
         self.assertEqual(len(response.data["posts"]), 2)
         self.assertEqual(response.data["posts"][1]["body"], "Lorua Merleu")
 
-        response = self.client.get(f"/api/posts/user-get/1827368712638612836812686/")
+        response = self.client.get(f"/api/posts/user-get/12364567/")
         self.assertEqual(response.status_code, 530)
     
     def test_get_post_by_id(self):
@@ -56,7 +56,7 @@ class TestPostViews(TestCase):
         self.assertEqual(response.data['id'], id)
         self.assertEqual(response.data['body'], "Lorua Merleu")
         
-        response = self.client.get(f"/api/posts/get/1827368712638612836812686/")
+        response = self.client.get(f"/api/posts/get/12364567/")
         self.assertEqual(response.status_code, 533)
         
     def test_update_post(self):
@@ -76,7 +76,7 @@ class TestPostViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Post.objects.filter(id=id).first().body, "Merleu Sorleu")
         
-        response = self.client.patch(f"/api/posts/update/1827368712638612836812686/", 
+        response = self.client.patch(f"/api/posts/update/12364567/", 
                                      {
                                          "body": "Merleu Sorleu"
                                      }, 
@@ -136,7 +136,7 @@ class TestPostViews(TestCase):
                                     **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         
-        response = self.client.post(f"/api/post/1236787654334567/comment/", 
+        response = self.client.post(f"/api/post/12364567/comment/", 
                                     {"body": "Fajny post :]"},
                                     **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 530)
