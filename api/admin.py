@@ -1,22 +1,22 @@
 from django.contrib import admin
 from .models import *
 
-class PostAdmin(Post):
+class PostAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Post, PostAdmin)
 
-class LikesAdmin(Likes):
+class LikesAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Likes, LikesAdmin)
 
-class CommentAdmin(Comment):
+class CommentAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Comment, CommentAdmin)
 
-class ObservationAdmin(Observation):
+class ObservationAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Observation, ObservationAdmin)
