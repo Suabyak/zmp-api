@@ -9,15 +9,26 @@ from api.utils.models import serialize_model_list
 
 class SingUpView(APIView):    
     def post(self, request):
+        try:
+            request.data["username"]
+            request.data["email"]
+            request.data["password"]
+            request.data["password_confirm"]
+        except KeyError:
+            return Response({
+                "success":False,
+            "message":"Wrong data send"
+            }, status = 530)
+            
         if (request.data["password"] != request.data["password_confirm"]):  
             return Response({
                 "success":False, 
-                "message":"Passwords are not the same"})
-        
+                "message":"Passwords are not the same"},
+                            status=530)
         User.objects.create_user(username = request.data["username"],
                                 email = request.data["email"],
                                 password = request.data["password"])
-        
+            
         return Response({
             "success":True, 
             "message":"Successfully signed up"})
@@ -31,7 +42,8 @@ class SignInView(APIView):
         if user is None:
             return Response({
                 "success":False, 
-                "message":"Invalid username or password"})
+                "message":"Invalid username or password"},
+                            status=530)
         token = get_token_for_user(user)
         
         return Response(
@@ -47,7 +59,8 @@ class GetUserByIdView(APIView):
         except User.DoesNotExist:
             return Response({
                 "success":False, 
-                "message":f"There is no User with id {request.GET.get('id')}"})
+                "message":f"There is no User with id {request.GET.get('id')}"},
+                            status=530)
         
         return Response({
             "success":True, 
@@ -74,16 +87,19 @@ class GetUserView(APIView):
         except KeyError:
             return Response({
                 "success":False, 
-                "message":"Token not provided"})
+                "message":"Token not provided"},
+                            status=530)
         except WrongTokenException:
             return Response({
                 "success":False, 
-                "message":"Wrong token"})
+                "message":"Wrong token"},
+                            status=530)
         
         if user is None:
             return Response({
                 "success":False, 
-                "message":"Unauthenticated"})
+                "message":"Unauthenticated"},
+                            status=530)
         user["success"] = True 
         return Response(user)
 
@@ -103,17 +119,20 @@ class ObserveUserView(APIView):
         except KeyError:
             return Response({
                 "success":False, 
-                "message":"Token not provided"})
+                "message":"Token not provided"},
+                            status=530)
         except WrongTokenException:
             return Response({
                 "success":False, 
-                "message":"Wrong token"})
+                "message":"Wrong token"},
+                            status=530)
         to_observe = User.objects.filter(id=request.data["id"]).first()
         
         if to_observe is None:
             return Response({
                 "success":False, 
-                "message":f"There is no User with id {request.data['id']}"})
+                "message":f"There is no User with id {request.data['id']}"},
+                            status=530)
         
         Observation.objects.create(
             user=User.objects.filter(id=user["user_id"]).first(),

@@ -27,7 +27,7 @@ class TestUserViews(TestCase):
                                      "email" : "test@email.com",
                                      "password" : "test",
                                      "password_confirm" : "test2"})
-        self.assertEqual(response.data["success"], False)
+        self.assertEqual(response.status_code, 530)
         
         response = self.client.get("/api/users/sign-up/", 
                                     {"username" : "TestUser", 
@@ -35,6 +35,11 @@ class TestUserViews(TestCase):
                                      "password" : "test",
                                      "password_confirm" : "test2"})
         self.assertEqual(response.status_code, 405)
+        
+        response = self.client.post("/api/users/sign-up/", 
+                                    {"password" : "test",
+                                     "password_confirm" : "test2"})
+        self.assertEqual(response.status_code, 530)
     
     def test_sign_in_user(self):
         response = self.client.post("/api/users/sign-in/", 
@@ -46,13 +51,14 @@ class TestUserViews(TestCase):
         response = self.client.post("/api/users/sign-in/", 
                                     {"username" : "Suaby", 
                                      "password" : "suabo"})
-        self.assertEqual(response.data["success"], False)
+        self.assertEqual(response.status_code, 530)
+        self.assertEqual(response.status_code, 530)
         self.assertEqual(response.data["message"], "Invalid username or password")
         
         response = self.client.post("/api/users/sign-in/", 
                                     {"username" : "Suabyak", 
                                      "password" : "suaboooo"}) 
-        self.assertEqual(response.data["success"], False)
+        self.assertEqual(response.status_code, 530)
         self.assertEqual(response.data["message"], "Invalid username or password")
         
         response = self.client.get("/api/users/sign-in/")
@@ -67,7 +73,7 @@ class TestUserViews(TestCase):
         
         response = self.client.get("/api/users/get-user-data/", 
                                     {"id" : -3})
-        self.assertEqual(response.data["success"], False)
+        self.assertEqual(response.status_code, 530)
         
         
         response = self.client.post("/api/users/get-user-data/", 
