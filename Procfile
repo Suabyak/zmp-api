@@ -1,1 +1,1 @@
-web: gunicorn <project-name>.wsgi
+web: gunicorn zmp_api.wsgi
