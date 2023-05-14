@@ -138,9 +138,33 @@ class TestUserViews(TestCase):
                             **{"HTTP_AUTHORIZATION" : self.token})
         self.assertEqual(response.status_code, 200)
         
-        # response = self.client.post(f"/api/user/observe/", 
-        #                     {"id": self.user.id},
-        #                     **{"HTTP_AUTHORIZATION" : "Wrong token"})
-        # self.assertEqual(response.status_code, 200)
-    
+        response = self.client.get(f"/api/user/observe/", 
+                            {"id": self.user.id},
+                            **{"HTTP_AUTHORIZATION" : "Wrong token"})
+        self.assertEqual(response.status_code, 405)
         
+        response = self.client.post(f"/api/user/observe/", 
+                            {},
+                            **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 530)
+
+    def test_set_profile(self):
+        response = self.client.post(f"/api/user/profile/set/", 
+                            {"file": "zdjencie"},
+                            **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client.get(f"/api/user/profile/set/", 
+                            {"file": "zdjencie"},
+                            **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 405)
+        
+        response = self.client.post(f"/api/user/profile/set/", 
+                            {},
+                            **{"HTTP_AUTHORIZATION" : self.token})
+        self.assertEqual(response.status_code, 530)
+        
+        response = self.client.post(f"/api/user/profile/set/", 
+                            {"file": "zdjencie"},
+                            **{"HTTP_AUTHORIZATION" : "Wrong token"})
+        self.assertEqual(response.status_code, 530)
