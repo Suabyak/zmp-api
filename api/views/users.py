@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from api.utils.jwt_token import get_user_from_token, get_token_for_user, WrongTokenException
 from api.models import Comment, Observation, Profile
-from api.utils.models import serialize_model_list
+from api.utils.models import serialize_model_list, serialize_user_list
 
 
 class SingUpView(APIView):    
@@ -95,13 +95,10 @@ class GetUsersBySearchView(APIView):
             }, status = 530)
             
         users = User.objects.filter(username__contains=request.GET.get("search"))
-        
-        users_lsit = list()
-        for user in users:
-            users_lsit.append({"username":user.username, 
-                            "id":user.id})
+        users = serialize_user_list(users)
             
-        return Response(users_lsit)
+            
+        return Response(users)
 
 class GetUserView(APIView):
     def get(self, request):
