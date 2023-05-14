@@ -1,0 +1,112 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+
+\title{Dokumentacja Projektu \\
+Aplikacja Medium Społecznościowego}
+\author{Arkadiusz Torba, 41286\\
+Mateusz Bizoń, 41252\\
+Urszula Gręzicka, 41260}
+\date{Maj 2023}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Opis funkcjonalny systemu}
+Aplikacja umożliwia użytkownikom rejestrację i logowanie, tworzenie postów z tekstem i zdjęciami, dodawanie znajomych, lajkowanie i komentowanie postów. Możliwe jest także wyszukiwanie innych użytkowników po nazwie użytkownika. Dodatkowo, użytkownicy mogą zmieniać swoje dane osobowe.
+\section{Opis technologii}
+\begin{itemize}
+    \item GitHub - narzędzie wykorzystywane do kontroli wersji kodu.
+\end{itemize}
+\subsection{API}
+\begin{itemize}
+    \item Python - język programowania na którym opiera się cały system api.
+    \item Django - framework umożliwiający w łatwy sposób obsługiwanie zapytań http.
+    \item Django-Rest-Framework - framework rozszerzający Django ułatwiający przytwarzanie zapytań oraz umozliwiający obsługę tokenów jwt wykorzystanych w aplikacji do autentykacji.
+    \item Sqlite3 - silnik bazy danych wykorzystanej w aplikacji.
+    \item Heroku - aplikacja internetowa umożliwiająca hosting aplikacji do sieci www.
+\end{itemize}
+\subsection{Web}
+\begin{itemize}
+    \item Javascript
+    \item React
+\end{itemize}
+\subsection{Mobile}
+\begin{itemize}
+    \item Kotlin
+\end{itemize}
+
+\section{Wykorzystane wzorce projektowe}
+\subsection{API}
+\begin{itemize}
+    \item MVC - Wzorzec Model-Widok-Kontroler to główny wzorzec wykorzystany przy tworzeniu aplikcaji w django.
+    \item Serializer - Wykorzystywany do przetwarzania modeli django na obiekty mogące zostać wysłane w json responsie - słowniki lub listy.
+\end{itemize}
+\subsection{Web}
+\begin{itemize}
+    \item Adapter - Wykorzystany do mapowania danych w celu przekazania do danego komponentu.
+\end{itemize}
+\subsection{Mobile}
+\begin{itemize}
+    \item Singleton - Wykorzystany do tworzenia instancji komponentó wyświetlanych w aplikacji.
+    \item Adapter - Wykorzystany do mapowania danych w celu przekazania do danego komponentu.
+\end{itemize}
+
+\section{Instrukcje uruchomienia testów oraz systemów}
+\subsection{API}
+\subsubsection{Local API}
+\begin{itemize}
+\item 1. Install python
+\item 2. Install pipenv:
+\begin{itemize}
+    \item python -m pip install pipenv
+\end{itemize}
+
+\item 3. Install dependencies
+
+\begin{itemize}
+    \item git clone https://github.com/Suabyak/zmp-api
+    \item python -m pipenv install --dev
+\end{itemize}
+
+\item 4. Run/make migrations
+
+\begin{itemize}
+    \item python -m pipenv shell
+    \item python manage.py makemigrations
+    \item python manage.py migrate
+\end{itemize}
+
+\item 5. Run dev server
+
+\begin{itemize}
+    \item python manage.py runserver
+\end{itemize}
+
+In case api doesn't work repeat from Step 3
+
+\end{itemize}
+\subsubsection{Api tests}
+\begin{itemize}
+    \item Inside main project directory run:
+    \begin{itemize}
+        \item python manage.py test
+    \end{itemize}
+\end{itemize}
+
+\subsection{Web}
+\begin{itemize}
+    \item 
+\end{itemize}
+
+\section{Wnioski projektowe}
+\subsection{API}
+Podejście programistyczne Test Driven Development pozwala na wykrycie błędów spowodowanych poprzez zmiany w innej części systemu(np. zmiana formatu w jakim są przesyłane są dane), dzięki czemu mamy łatwy dostęp do informacji gdzie wystąpił błąd. Testowanie endpointów aplikacji pozwala na zaoszczędzenie czasu po pierwsze na samym sprawdzaniu tych endpointów czy działają w odpowiedni sposób, ale przede wszystkim ułatwia nam rozwiązywanie problemów.
+\subsection{Web}
+
+\subsection{Mobile}
+
+\end{document}
