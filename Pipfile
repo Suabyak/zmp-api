@@ -5,15 +5,16 @@ name = "pypi"
 
 [packages]
 django = "==3.2"
-mysqlclient = "*"
 django-cors-headers = "*"
-pillow = "*"
 djangorestframework = "*"
 djangorestframework-jwt = "==1.11.0"
 pyjwt = "*"
 django-rest-swagger = "*"
 pyyaml = "*"
 uritemplate = "*"
+gunicorn = "*"
+django-heroku = "*"
+whitenoise = "*"
 
 [dev-packages]
 

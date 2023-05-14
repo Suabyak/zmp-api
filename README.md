@@ -8,7 +8,7 @@ python -m pip install pipenv
 python -m pipenv install --dev
 ```
 4. Connect in settings.py your mysql database
-5. Run/make migrations
+5. Run migrations
 ```
 python -m pipenv shell
 python manage.py migrate
