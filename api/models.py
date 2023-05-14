@@ -18,7 +18,6 @@ class Post(models.Model):
         return {
             "id": self.id,
             "user": serialize_user(self.user),
-            "user_profile": Profile.getByUser(self.user),
             "body": self.body,
             "file": self.image,
             "likes": likes,

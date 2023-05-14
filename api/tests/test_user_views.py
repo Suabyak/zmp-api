@@ -68,7 +68,7 @@ class TestUserViews(TestCase):
         response = self.client.get("/api/users/get-user-data/", 
                                     {"id" : self.user.id})
         self.assertEqual(response.data["username"], self.user.username)
-        self.assertEqual(response.data["success"], True)
+        self.assertEqual(response.status_code, 200)
         
         
         response = self.client.get("/api/users/get-user-data/", 
