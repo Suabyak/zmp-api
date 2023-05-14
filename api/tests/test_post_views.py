@@ -39,7 +39,7 @@ class TestPostViews(TestCase):
         self.assertEqual(len(response.data), 2)
         self.assertEqual(response.data[1]["body"], "Lorua Merleu")
 
-        response = self.client.get(f"/api/posts/user-get/1827368712638612836812686/")
+        response = self.client.get(f"/api/posts/user-get/136812686/")
         self.assertEqual(response.status_code, 530)
     
     def test_get_post_by_id(self):
@@ -56,7 +56,7 @@ class TestPostViews(TestCase):
         self.assertEqual(response.data['id'], id)
         self.assertEqual(response.data['body'], "Lorua Merleu")
         
-        response = self.client.get(f"/api/posts/get/1827368712638612836812686/")
+        response = self.client.get(f"/api/posts/get/136812686/")
         self.assertEqual(response.status_code, 533)
         
     def test_update_post(self):
@@ -77,7 +77,7 @@ class TestPostViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Post.objects.filter(id=id).first().body, "Merleu Sorleu")
         
-        response = self.client.patch(f"/api/posts/update/1827368712638612836812686/", 
+        response = self.client.patch(f"/api/posts/update/136812686/", 
                                      {
                                          "body": "Merleu Sorleu", 
                                          "file":""
