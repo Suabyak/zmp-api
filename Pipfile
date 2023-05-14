@@ -15,6 +15,7 @@ django-rest-swagger = "*"
 pyyaml = "*"
 uritemplate = "*"
 whitenoise = "*"
+gunicorn = "*"
 
 [dev-packages]
 
