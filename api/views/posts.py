@@ -25,14 +25,10 @@ class CreatePostView(APIView):
             return Response({
                 "message":"Wrong token"}, status=530)
         user = User.objects.filter(id=user["user_id"]).first()
-        
-        post = Post(
-            body=request.data["body"],
-            user=user,
-            image=request.data["file"]
-        )
-        
-        post.save()
+
+        post = Post.objects.create(body=request.data["body"],
+                                    user=user,
+                                    image=request.data["file"])
         
         return Response({
             "success": True,
@@ -152,12 +148,9 @@ class LikePostView(APIView):
             likes.delete()
         
             return Response()
-            
-        likes = Likes(
-            post = post,
-            user = User.objects.filter(id=user["user_id"]).first()
-        )
-        likes.save()
+        
+        likes = Likes.objects.create(post = post,
+            user = User.objects.filter(id=user["user_id"]).first())
         
         return Response()
         
@@ -186,13 +179,10 @@ class CommentPostView(APIView):
             return Response({
                 "message": f"There is no post with {post_id} id"
             }, status=530)
-        
-        comment = Comment(
-            post = post,
+            
+        comment = Comment.objects.create(post = post,
             user = User.objects.filter(id=user["user_id"]).first(),
-            body = request.data["body"]
-        )
-        comment.save()
+            body = request.data["body"])
         
         return Response()
 
