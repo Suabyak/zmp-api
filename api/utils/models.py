@@ -22,7 +22,7 @@ def serialize_data(data):
     return {
         "second": data.second,
         "minute": data.minute,
-        "hour": data.hour+2,
+        "hour": data.hour,
         "day": data.day,
         "month": data.month,
         "year": data.year,
