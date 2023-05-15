@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[polish]{babel}
+\usepackage{hyperref}
 
 \title{Dokumentacja Projektu \\
 Aplikacja Medium Społecznościowego}
@@ -31,12 +32,14 @@ Aplikacja umożliwia użytkownikom rejestrację i logowanie, tworzenie postów z
 \end{itemize}
 \subsection{Web}
 \begin{itemize}
-    \item Javascript
-    \item React
+    \item Javascript - język programowania używany we frameworku React.
+    \item React - framework służący do renderowania w czasie rzeczywistym.
+    \item Yarn - narzędzie służące do zarządzania zależnościami
+    \item Netlify - aplikacja internetowa umożliwiająca hosting aplikacji do sieci www.
 \end{itemize}
 \subsection{Mobile}
 \begin{itemize}
-    \item Kotlin
+    \item Kotlin - język programowania służący do implementacji aplikacji mobilnych, odpowiada za wysyłanie zapytań oraz renderowanie.
 \end{itemize}
 
 \section{Wykorzystane wzorce projektowe}
@@ -93,20 +96,44 @@ In case api doesn't work repeat from Step 3
 \begin{itemize}
     \item Inside main project directory run:
     \begin{itemize}
+        \item pipenv shell
         \item python manage.py test
     \end{itemize}
 \end{itemize}
 
 \subsection{Web}
+
 \begin{itemize}
-    \item 
+    \item First clone the repository
+    \begin{itemize}
+        \item  git clone https://github.com/Suabyak/zmp-web.git
+    \end{itemize}
+    \item Enter the yarn command
+    \begin{itemize}
+        \item  yarn
+    \end{itemize}
+    \item Enabling application on localhost
+    \begin{itemize}
+        \item  yarn start
+    \end{itemize}
+
 \end{itemize}
 
 \section{Wnioski projektowe}
 \subsection{API}
 Podejście programistyczne Test Driven Development pozwala na wykrycie błędów spowodowanych poprzez zmiany w innej części systemu(np. zmiana formatu w jakim są przesyłane są dane), dzięki czemu mamy łatwy dostęp do informacji gdzie wystąpił błąd. Testowanie endpointów aplikacji pozwala na zaoszczędzenie czasu po pierwsze na samym sprawdzaniu tych endpointów czy działają w odpowiedni sposób, ale przede wszystkim ułatwia nam rozwiązywanie problemów.
 \subsection{Web}
-
+Porównując tworzenie requestów w React i Android, React wydaje się być bardziej intuicyjny w tym zakresie. Nauczenie się tworzenia requestów w React nie powinno zająć sporo czasu osobom, które dopiero zaczynają pracować z Reactem.
 \subsection{Mobile}
+W przypadku testowania połączenia z API w aplikacji Android, konieczne jest wpisanie adresu IP komputera zamiast użycia "localhost" lub "127.0.0.1" podczas testowania w trybie lokalnym. Dodaje to niepotrzebnej komplikacji w procesie tworzenia.
+\section{Hosting}
+
+\subsection{API}
+\url{https://zmp-social-app.herokuapp.com}
+
+\subsection{Web}
+\url{https://master--social-media-app-zmp.netlify.app/login}
+\subsection{Mobile}
+\url{https://drive.google.com/file/d/1rRrygQXK-JFlr6PYZL-OdO8ohp0ADvS-/view?usp=share_link}
 
 \end{document}
